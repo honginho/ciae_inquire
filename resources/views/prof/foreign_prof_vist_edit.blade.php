@@ -2,7 +2,7 @@
 @section('content')
 <div class="row">
 	<div class="col-md-12">
-		<h1 class="page-header">外籍學者蒞校訪問資料修改</h1>
+		<h1 class="page-header">境外學者蒞校訪問資料修改</h1>
 	</div>
 </div>
 <div class="row">
@@ -18,11 +18,11 @@
                             <p class="text-danger">{{$errors->first('name')}}</p>
                         @endif
 						<div class="form-group">
-							<label for="">外籍學者姓名</label>
+							<label for="">境外學者姓名</label>
 							<input type="text" class="form-control" name="name" value="{{$name}}">
 						</div>
 						<div class="form-group">
-							<label for="profLevel">外籍學者身分</label>
+							<label for="profLevel">境外學者身分</label>
 							<select name="profLevel" id="profLevel" class="form-control">
 								<option value="1">教授</option>
 								<option value="2">副教授</option>

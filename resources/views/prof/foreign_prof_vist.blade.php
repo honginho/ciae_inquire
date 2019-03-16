@@ -4,7 +4,7 @@
 <div class="row">
 	<div class="col-md-12">
 		<a href="{{URL('foreign_prof_vist')}}" style="color:black">
-			<h1 class="page-header">外籍學者蒞校訪問</h1>
+			<h1 class="page-header">境外學者蒞校訪問</h1>
 		</a>
 	</div>
 </div>
@@ -70,7 +70,7 @@
 										<i class="fa fa-sort" aria-hidden="true"></i>
 									</td>
 									<td id="name" class="text-nowrap"
-										onclick="sort(id)">外籍學者姓名
+										onclick="sort(id)">境外學者姓名
 										<i class="fa fa-sort" aria-hidden="true"></i>
 									</td>
 									<td id="profLevel" class="text-nowrap"
@@ -157,11 +157,11 @@
                                 <p class="text-danger">{{$errors->first('name')}}</p>
                             @endif
 							<div class="form-group">
-								<label for="">外籍學者姓名</label>
+								<label for="">境外學者姓名</label>
 								<input type="text" class="form-control" name="name" value="{{old('name')}}">
 							</div>
 							<div class="form-group">
-								<label for="profLevel">外籍學者身分</label>
+								<label for="profLevel">境外學者身分</label>
 								<select name="profLevel" id="profLevel_option" class="form-control">
 									<option value="1">教授</option>
 									<option value="2">副教授</option>
@@ -213,11 +213,11 @@
 						<form action="{{url('foreign_prof_vist/search')}}">
 							@include('../layouts/select_search')
 							<div class="form-group">
-								<label for="">外籍學者姓名</label>
+								<label for="">境外學者姓名</label>
 								<input type="text" class="form-control" name="name" />
 							</div>
 							<div class="form-group">
-								<label for="profLevel">外籍學者身分</label>
+								<label for="profLevel">境外學者身分</label>
 								<select name="profLevel" class="form-control">
 									<option value=""></option>
 									<option value="1">教授</option>

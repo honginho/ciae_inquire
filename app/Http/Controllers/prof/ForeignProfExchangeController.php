@@ -196,8 +196,8 @@ class ForeignProfExchangeController extends Controller
                         '邀請單位一級單位名稱'=>'required|max:11',
                         '邀請單位二級單位名稱'=>'required|max:11',
                         '國籍'=>'required|max:20',
-                        '外籍學者姓名'=>'required|max:20',
-                        '外籍學者身分教授副教授助理教授或博士後研究員'=>'required|max:20',
+                        '境外學者姓名'=>'required|max:20',
+                        '境外學者身分教授副教授助理教授或博士後研究員'=>'required|max:20',
                         '開始時間'=>'required|date',
                         '結束時間'=>'required|date',
                         '備註'=>'max:500',
@@ -220,11 +220,11 @@ class ForeignProfExchangeController extends Controller
                             $item['dept'] = $value;
                             unset($item[$key]);
                             break;
-                        case '外籍學者姓名':
+                        case '境外學者姓名':
                             $item['name'] = $value;
                             unset($item[$key]);
                             break;
-                        case '外籍學者身分教授副教授助理教授或博士後研究員':
+                        case '境外學者身分教授副教授助理教授或博士後研究員':
                             switch($value){
                                 case "教授":
                                     $value = 1;
@@ -289,7 +289,7 @@ class ForeignProfExchangeController extends Controller
     }
 
     public function example(Request $request){
-        return response()->download(public_path().'/Excel_example/prof/foreign_prof_exchange.xlsx',"外籍學者蒞校交換.xlsx");
+        return response()->download(public_path().'/Excel_example/prof/foreign_prof_exchange.xlsx',"境外學者蒞校交換.xlsx");
     }
 
     private function isAllNull($array){

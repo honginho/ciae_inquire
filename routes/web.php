@@ -93,7 +93,7 @@ Route::group(['middleware' => 'auth'],function(){
 	Route::delete('/prof_foreign_research/{id}','prof\ProfForeignResearchController@delete');
 
 
-		//外籍學者蒞校訪問
+		//境外學者蒞校訪問
 
 	Route::get('/foreign_prof_vist','prof\ForeignProfVistController@index');
 	Route::get('/foreign_prof_vist/search','prof\ForeignProfVistController@search');
@@ -104,7 +104,7 @@ Route::group(['middleware' => 'auth'],function(){
 	Route::patch('/foreign_prof_vist/{id}','prof\ForeignProfVistController@update');
 	Route::delete('/foreign_prof_vist/{id}','prof\ForeignProfVistController@delete');
 
-		//外籍學者蒞校交換
+		//境外學者蒞校交換
 
 	Route::get('/foreign_prof_exchange','prof\ForeignProfExchangeController@index');
 	Route::get('/foreign_prof_exchange/search','prof\ForeignProfExchangeController@search');

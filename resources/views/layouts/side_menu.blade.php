@@ -35,10 +35,10 @@
                                     <a href="{{URL('/prof_foreign_research')}}">本校教師赴國外研究</a>
                                 </li>
                                 <li>
-                                    <a href="{{URL('/foreign_prof_vist')}}">外籍學者蒞校訪問</a>
+                                    <a href="{{URL('/foreign_prof_vist')}}">境外學者蒞校訪問</a>
                                 </li>
                                 <li>
-                                    <a href="{{URL('/foreign_prof_exchange')}}">外籍學者來校交換</a>
+                                    <a href="{{URL('/foreign_prof_exchange')}}">境外學者來校交換</a>
                                 </li>
                             </ul>
                         </li>

@@ -28,8 +28,8 @@
 			<a href="{{URL('/prof_attend_conference')}}" class="list-group-item">本校教師赴國外出席國際會議</a>
 			<a href="{{URL('/prof_exchange')}}" class="list-group-item">本校教師赴國外交換</a>
 			<a href="{{URL('/prof_foreign_research')}}" class="list-group-item">本校教師赴國外研究</a>
-			<a href="{{URL('/foreign_prof_vist')}}" class="list-group-item">外籍學者蒞校訪問</a>
-			<a href="{{URL('/foreign_prof_exchange')}}" class="list-group-item">外籍學者來校交換</a>
+			<a href="{{URL('/foreign_prof_vist')}}" class="list-group-item">境外學者蒞校訪問</a>
+			<a href="{{URL('/foreign_prof_exchange')}}" class="list-group-item">境外學者來校交換</a>
 		</div>
 	</div>
 	<div class="col-md-6">
