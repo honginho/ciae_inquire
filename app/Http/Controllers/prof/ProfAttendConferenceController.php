@@ -51,6 +51,7 @@ class ProfAttendConferenceController extends Controller
             'profLevel'=>'required|max:11',
             'nation'=>'required|max:20',
             'confName'=>'required|max:200',
+            'publishedPaperName'=>'required|max:100',
             'startDate'=>'required',
             'endDate'=>'required',
             'comments'=>'max:500',
@@ -109,6 +110,9 @@ class ProfAttendConferenceController extends Controller
         if($request->confName != "")
             $Pattendconference = $Pattendconference
                 ->where('confName',"like","%$request->confName%");
+        if($request->publishedPaperName != "")
+            $Pattendconference = $Pattendconference
+                ->where('publishedPaperName',"like","%$request->publishedPaperName%");
         if($request->comments != "")
             $Pattendconference = $Pattendconference
                 ->where('comments',"like","%$request->comments%");
@@ -152,6 +156,7 @@ class ProfAttendConferenceController extends Controller
             'profLevel'=>'required|max:11',
             'nation'=>'required|max:20',
             'confName'=>'required|max:200',
+            'publishedPaperName'=>'required|max:100',
             'startDate'=>'required',
             'endDate'=>'required',
             'comments'=>'max:500',
@@ -202,6 +207,7 @@ class ProfAttendConferenceController extends Controller
                     '身分教授副教授助理教授或博士後研究員'=>'required|max:11',
                     '前往國家'=>'required|max:20',
                     '會議名稱'=>'required|max:200',
+                    '發表論文名稱'=>'required|max:100',
                     '開始時間'=>'required|date',
                     '結束時間'=>'required|date',
                     '備註'=>'max:500',
@@ -254,6 +260,10 @@ class ProfAttendConferenceController extends Controller
                             break;
                         case '會議名稱':
                             $item['confName'] = $value;
+                            unset($item[$key]);
+                            break;
+                        case '發表論文名稱':
+                            $item['publishedPaperName'] = $value;
                             unset($item[$key]);
                             break;
                         case '開始時間':

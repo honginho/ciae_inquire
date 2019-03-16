@@ -47,6 +47,14 @@
 								<textarea name="confName" id="confName" cols="30" rows="3" class="form-control">{{$confName}}</textarea>
 							</div>
 						
+						@if($errors->has('publishedPaperName'))
+                            <p class="text-danger">{{$errors->first('publishedPaperName')}}</p>
+                        @endif
+							<div class="form-group">
+								<label for="publishedPaperName">發表論文名稱</label>
+								<textarea name="publishedPaperName" id="publishedPaperName" cols="30" rows="3" class="form-control">{{$publishedPaperName}}</textarea>
+							</div>
+						
 						@if($errors->has('startDate')||$errors->has('endDate'))
                             <p class="text-danger col-md-6">{{ $errors->first('startDate')}}</p>
                             <p class="text-danger col-md-6">{{ $errors->first('endDate')}}</p>

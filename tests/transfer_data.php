@@ -484,6 +484,7 @@ mysqli_query($new_connect,"
 	  `profLevel` int(11) NOT NULL,
 	  `nation` varchar(20) NOT NULL,
 	  `confName` varchar(200) NOT NULL,
+	  `publishedPaperName` varchar(100) NOT NULL DEFAULT 'N/A',
 	  `startDate` date NOT NULL,
 	  `endDate` date NOT NULL,
 	  `comments` varchar(500)
@@ -500,10 +501,11 @@ while($array = mysqli_fetch_array($result)){
 		
 
 	$confName = mysqli_escape_string($new_connect,$array['ConfName']);
+	$publishedPaperName = mysqli_escape_string($new_connect,$array['publishedPaperName']);
 
 	$sql = "insert into prof_attend_conference
 		values(0,$newData[0],$newData[1],'$array[ChtName]',$array[ProfLevel]
-		,'$array[Nation]','$confName','$array[StartDate]','$array[EndDate]','$array[Memo]')";
+		,'$array[Nation]','$confName','$publishedPaperName','$array[StartDate]','$array[EndDate]','$array[Memo]')";
 
 	if(!mysqli_query($new_connect,$sql)){
 		
