@@ -108,6 +108,16 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::patch('/foreign_prof_exchange/{id}', 'prof\ForeignProfExchangeController@update');
 	Route::delete('/foreign_prof_exchange/{id}', 'prof\ForeignProfExchangeController@delete');
 
+		// 本校教師境內外演講、研習或講學活動
+	Route::get('/prof_speech_lecture', 'prof\ProfSpeechLectureController@index');
+	Route::get('/prof_speech_lecture/search', 'prof\ProfSpeechLectureController@search');
+	Route::get('/prof_speech_lecture/example', 'prof\ProfSpeechLectureController@example');
+	Route::post('/prof_speech_lecture', 'prof\ProfSpeechLectureController@insert');
+	Route::post('/prof_speech_lecture/upload', 'prof\ProfSpeechLectureController@upload');
+	Route::get('/prof_speech_lecture/{id}', 'prof\ProfSpeechLectureController@edit');
+	Route::patch('/prof_speech_lecture/{id}', 'prof\ProfSpeechLectureController@update');
+	Route::delete('/prof_speech_lecture/{id}', 'prof\ProfSpeechLectureController@delete');
+
 
 
 	// 學生專區
