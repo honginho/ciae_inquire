@@ -2,7 +2,7 @@
 @section('content')
 <div class="row">
 	<div class="col-md-12">
-		<h1 class="page-header">本校教師境內外演講、研習或講學活動</h1>
+		<h1 class="page-header">本校教師境內外演講、研習或講學活動修改</h1>
 	</div>
 </div>
 <div class="row">
