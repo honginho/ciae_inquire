@@ -45,6 +45,9 @@
                     <li>
                         <a href="{{ URL('/foreign_prof_attend_conference') }}">境外學者來校出席國際會議</a>
                     </li>
+                    <li>
+                        <a href="{{ URL('/foreign_prof_speech_lecture') }}">境外學者來校演講、研習或講學活動</a>
+                    </li>
                 </ul>
             </li>
 
