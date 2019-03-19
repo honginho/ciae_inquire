@@ -20,7 +20,7 @@ Route::post('/logout', 'Auth\LoginController@logout');
 Route::group(['middleware' => 'auth'], function(){
 	Route::get('/home', 'HomeController@index');
 
-	// 基本資料
+	// 基本資料 - - - - - - - - - - - - - - - - - - -
 
 		// 單位資料修改
 	Route::get('/user', 'UserController@index');
@@ -56,7 +56,7 @@ Route::group(['middleware' => 'auth'], function(){
 
 
 
-	// 教師、研究員專區
+	// 教師、研究員專區 - - - - - - - - - - - - - - - - - - -
 
 		// 本校教師赴國外出席國際會議
 	Route::get('/prof_attend_conference', 'prof\ProfAttendConferenceController@index');
@@ -118,9 +118,19 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::patch('/prof_speech_lecture/{id}', 'prof\ProfSpeechLectureController@update');
 	Route::delete('/prof_speech_lecture/{id}', 'prof\ProfSpeechLectureController@delete');
 
+		// 境外學者來校出席國際會議
+	Route::get('/foreign_prof_attend_conference', 'prof\ForeignProfAttendConferenceController@index');
+	Route::get('/foreign_prof_attend_conference/search', 'prof\ForeignProfAttendConferenceController@search');
+	Route::get('/foreign_prof_attend_conference/example', 'prof\ForeignProfAttendConferenceController@example');
+	Route::post('/foreign_prof_attend_conference', 'prof\ForeignProfAttendConferenceController@insert');
+	Route::post('/foreign_prof_attend_conference/upload', 'prof\ForeignProfAttendConferenceController@upload');
+	Route::get('/foreign_prof_attend_conference/{id}', 'prof\ForeignProfAttendConferenceController@edit');
+	Route::patch('/foreign_prof_attend_conference/{id}', 'prof\ForeignProfAttendConferenceController@update');
+	Route::delete('/foreign_prof_attend_conference/{id}', 'prof\ForeignProfAttendConferenceController@delete');
 
 
-	// 學生專區
+
+	// 學生專區 - - - - - - - - - - - - - - - - - - -
 
 		// 赴國外出席國際會議
 	Route::get('/stu_attend_conf', 'stu\StuAttendConfController@index');
@@ -184,7 +194,7 @@ Route::group(['middleware' => 'auth'], function(){
 
 
 
-	// 其他國際交流活動
+	// 其他國際交流活動 - - - - - - - - - - - - - - - - - - -
 
 		// 跨國學位
 	Route::get('/transnational_degree', 'other\TransnationalDegreeController@index');
@@ -248,7 +258,7 @@ Route::group(['middleware' => 'auth'], function(){
 
 
 
-	// 系所對照表下載
+	// 系所對照表下載 - - - - - - - - - - - - - - - - - - -
 	Route::get('/example', function(){
         return response()->download(public_path() . '/Excel_example/college_data.xlsx', "系所對照表.xlsx");
 	});
