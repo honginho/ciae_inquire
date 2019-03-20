@@ -313,7 +313,7 @@ class ProfSpeechLectureController extends Controller
     }
 
     public function example(Request $request) {
-        return response()->download(public_path().'/Excel_example/prof/prof_speech_lecture.xlsx', "本校教師赴國外研究.xlsx");
+        return response()->download(public_path().'/Excel_example/prof/prof_speech_lecture.xlsx', "本校教師境內外演講、研習或講學活動.xlsx");
     }
 
     private function isAllNull($array) {
