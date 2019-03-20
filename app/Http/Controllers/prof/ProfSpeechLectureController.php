@@ -275,10 +275,6 @@ class ProfSpeechLectureController extends Controller
                             $item['place'] = $value;
                             unset($item[$key]);
                             break;
-                        case '地點':
-                            $item['place'] = $value;
-                            unset($item[$key]);
-                            break;
                         case '開始時間':
                             $item['startDate'] = $value;
                             unset($item[$key]);
