@@ -59,6 +59,7 @@
 			<a href="{{ URL('/internationalize_activity') }}" class="list-group-item">國際化活動</a>
 			<a href="{{ URL('/international_journal_editor') }}" class="list-group-item">擔任國際期刊編輯</a>
 			<a href="{{ URL('/attend_international_organization') }}" class="list-group-item">參與國際組織</a>
+			<a href="{{ URL('/hold_international_conference') }}" class="list-group-item">辦理國際及兩岸學術研討會</a>
 		</div>
 	</div>
 </div>

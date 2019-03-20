@@ -85,6 +85,9 @@
                     <li>
                         <a href="{{ URL('/attend_international_organization') }}">參與國際組織</a>
                     </li>
+                    <li>
+                        <a href="{{ URL('/hold_international_conference') }}">辦理國際及兩岸學術研討會</a>
+                    </li>
                 </ul>
                 <!-- /.nav-second-level -->
             </li>

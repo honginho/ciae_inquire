@@ -266,6 +266,16 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::patch('/attend_international_organization/{id}', 'other\AttendInternationalOrganizationController@update');
 	Route::delete('/attend_international_organization/{id}', 'other\AttendInternationalOrganizationController@delete');
 
+		// 辦理國際及兩岸學術研討會
+	Route::get('/hold_international_conference', 'other\HoldInternationalConferenceController@index');
+	Route::get('/hold_international_conference/search', 'other\HoldInternationalConferenceController@search');
+	Route::get('/hold_international_conference/example', 'other\HoldInternationalConferenceController@example');
+	Route::post('/hold_international_conference', 'other\HoldInternationalConferenceController@insert');
+	Route::post('/hold_international_conference/upload', 'other\HoldInternationalConferenceController@upload');
+	Route::get('/hold_international_conference/{id}', 'other\HoldInternationalConferenceController@edit');
+	Route::patch('/hold_international_conference/{id}', 'other\HoldInternationalConferenceController@update');
+	Route::delete('/hold_international_conference/{id}', 'other\HoldInternationalConferenceController@delete');
+
 
 
 	// 系所對照表下載 - - - - - - - - - - - - - - - - - - -
