@@ -43,6 +43,9 @@
                         <a href="{{ URL('/prof_speech_lecture') }}">本校教師境內外演講、研習或講學活動</a>
                     </li>
                     <li>
+                        <a href="{{ URL('/prof_international_academic_cooperation') }}">與國外及兩岸學校進行學術合作交流</a>
+                    </li>
+                    <li>
                         <a href="{{ URL('/foreign_prof_attend_conference') }}">境外學者來校出席國際會議</a>
                     </li>
                     <li>

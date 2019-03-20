@@ -118,6 +118,16 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::patch('/prof_speech_lecture/{id}', 'prof\ProfSpeechLectureController@update');
 	Route::delete('/prof_speech_lecture/{id}', 'prof\ProfSpeechLectureController@delete');
 
+		// 與國外及兩岸學校進行學術合作交流
+	Route::get('/prof_international_academic_cooperation', 'prof\ProfInternationalAcademicCooperationController@index');
+	Route::get('/prof_international_academic_cooperation/search', 'prof\ProfInternationalAcademicCooperationController@search');
+	Route::get('/prof_international_academic_cooperation/example', 'prof\ProfInternationalAcademicCooperationController@example');
+	Route::post('/prof_international_academic_cooperation', 'prof\ProfInternationalAcademicCooperationController@insert');
+	Route::post('/prof_international_academic_cooperation/upload', 'prof\ProfInternationalAcademicCooperationController@upload');
+	Route::get('/prof_international_academic_cooperation/{id}', 'prof\ProfInternationalAcademicCooperationController@edit');
+	Route::patch('/prof_international_academic_cooperation/{id}', 'prof\ProfInternationalAcademicCooperationController@update');
+	Route::delete('/prof_international_academic_cooperation/{id}', 'prof\ProfInternationalAcademicCooperationController@delete');
+
 		// 境外學者來校出席國際會議
 	Route::get('/foreign_prof_attend_conference', 'prof\ForeignProfAttendConferenceController@index');
 	Route::get('/foreign_prof_attend_conference/search', 'prof\ForeignProfAttendConferenceController@search');

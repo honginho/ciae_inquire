@@ -31,6 +31,7 @@
 			<a href="{{ URL('/foreign_prof_vist') }}" class="list-group-item">境外學者蒞校訪問</a>
 			<a href="{{ URL('/foreign_prof_exchange') }}" class="list-group-item">境外學者來校交換</a>
 			<a href="{{ URL('/prof_speech_lecture') }}" class="list-group-item">本校教師境內外演講、研習或講學活動</a>
+			<a href="{{ URL('/prof_international_academic_cooperation') }}" class="list-group-item">與國外及兩岸學校進行學術合作交流</a>
 			<a href="{{ URL('/foreign_prof_attend_conference') }}" class="list-group-item">境外學者來校出席國際會議</a>
 			<a href="{{ URL('/foreign_prof_speech_lecture') }}" class="list-group-item">境外學者來校演講、研習或講學活動</a>
 		</div>
