@@ -196,10 +196,10 @@ class ForeignProfAttendConferenceController extends Controller
 
                 $errorLine = $arrayKey + 2;
                 $rules = [
-                    '一般單位' => 'required|max:11',
-                    '系所部門' => 'required|max:11',
-                    '姓名' => 'required|max:20',
-                    '身分教授副教授助理教授或博士後研究員' => 'required|max:11',
+                    '一級邀請單位' => 'required|max:11',
+                    '二級邀請單位' => 'required|max:11',
+                    '境外學者姓名' => 'required|max:20',
+                    '境外學者身分教授副教授助理教授或博士後研究員' => 'required|max:11',
                     '國籍' => 'required|max:20',
                     '會議名稱' => 'required|max:200',
                     '發表論文名稱' => 'required|max:100',
@@ -216,19 +216,19 @@ class ForeignProfAttendConferenceController extends Controller
 
                 foreach ($item as $key => $value) {
                     switch ($key) {
-                        case '一般單位':
+                        case '一級邀請單位':
                             $item['college'] = $value;
                             unset($item[$key]);
                             break;
-                        case '系所部門':
+                        case '二級邀請單位':
                             $item['dept'] = $value;
                             unset($item[$key]);
                             break;
-                        case '姓名':
+                        case '境外學者姓名':
                             $item['name'] = $value;
                             unset($item[$key]);
                             break;
-                        case '身分教授副教授助理教授或博士後研究員':
+                        case '境外學者身分教授副教授助理教授或博士後研究員':
                             switch($value) {
                                 case "教授":
                                     $value = 1;
@@ -300,7 +300,7 @@ class ForeignProfAttendConferenceController extends Controller
     }
 
     public function example(Request $request) {
-        return response()->download(public_path().'/Excel_example/prof/foreign_prof_attend_conference.xlsx', "本校教師赴國外出席國際會議.xlsx");
+        return response()->download(public_path().'/Excel_example/prof/foreign_prof_attend_conference.xlsx', "境外學者來校出席國際會議.xlsx");
     }
 
     private function isAllNull($array) {
