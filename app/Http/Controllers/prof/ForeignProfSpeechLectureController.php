@@ -13,7 +13,7 @@ use App\CollegeData;
 
 class ForeignProfSpeechLectureController extends Controller
 {
-    public function index(Request $request) {
+    public function index (Request $request) {
         $sortBy = 'id';
         $orderBy = "desc";
         $user = Auth::user();
@@ -40,8 +40,9 @@ class ForeignProfSpeechLectureController extends Controller
     	$data = compact('foreignPspeechlecture', 'user');
     	return view ('prof/foreign_prof_speech_lecture', $data);
     }
-    public function insert(Request $request) {
-    	 $rules = [
+
+    public function insert (Request $request) {
+    	$rules = [
             'college' => 'required|max:11',
             'dept' => 'required|max:11',
             'name' => 'required|max:20',
@@ -124,14 +125,14 @@ class ForeignProfSpeechLectureController extends Controller
         return view('prof/foreign_prof_speech_lecture', $data);
     }
 
-    public function edit($id) {
+    public function edit ($id) {
         $foreignPspeechlecture = ForeignProfSpeechLecture::find($id);
         if (Gate::allows('permission', $foreignPspeechlecture))
             return view('prof/foreign_prof_speech_lecture_edit', $foreignPspeechlecture);
         return redirect('foreign_prof_speech_lecture');
     }
 
-    public function update($id, Request $request) {
+    public function update ($id, Request $request) {
         $foreignPspeechlecture = ForeignProfSpeechLecture::find($id);
         if (!Gate::allows('permission', $foreignPspeechlecture))
             return redirect('foreign_prof_speech_lecture');
@@ -167,7 +168,7 @@ class ForeignProfSpeechLectureController extends Controller
         return redirect('foreign_prof_speech_lecture')->with('success', '更新成功');
     }
 
-    public function delete($id) {
+    public function delete ($id) {
         $foreignPspeechlecture = ForeignProfSpeechLecture::find($id);
         if (!Gate::allows('permission', $foreignPspeechlecture))
             return redirect('foreign_prof_speech_lecture');
@@ -175,9 +176,8 @@ class ForeignProfSpeechLectureController extends Controller
         return redirect('foreign_prof_speech_lecture');
     }
 
-
-    public function upload(Request $request) {
-        Excel::load($request->file('file'), function($reader) {
+    public function upload (Request $request) {
+        Excel::load($request->file('file'), function ($reader) {
             $array = $reader->toArray();
             $newArray = [];
             foreach ($array as $arrayKey => $item) {
@@ -186,10 +186,10 @@ class ForeignProfSpeechLectureController extends Controller
 
                 $errorLine = $arrayKey + 2;
                 $rules = [
-                    '一般單位' => 'required|max:11',
-                    '系所部門' => 'required|max:11',
-                    '姓名' => 'required|max:20',
-                    '身分教授副教授助理教授或博士後研究員' => 'required|max:11',
+                    '一級邀請單位' => 'required|max:11',
+                    '二級邀請單位' => 'required|max:11',
+                    '境外學者姓名' => 'required|max:20',
+                    '境外學者身分教授副教授助理教授或博士後研究員' => 'required|max:11',
                     '國籍' => 'required|max:20',
                     '開始時間' => 'required|date',
                     '結束時間' => 'required|date',
@@ -204,20 +204,20 @@ class ForeignProfSpeechLectureController extends Controller
 
                 foreach ($item as $key => $value) {
                     switch ($key) {
-                        case '一般單位':
+                        case '一級邀請單位':
                             $item['college'] = $value;
                             unset($item[$key]);
                             break;
-                        case '系所部門':
+                        case '二級邀請單位':
                             $item['dept'] = $value;
                             unset($item[$key]);
                             break;
-                        case '姓名':
+                        case '境外學者姓名':
                             $item['name'] = $value;
                             unset($item[$key]);
                             break;
-                        case '身分教授副教授助理教授或博士後研究員':
-                            switch($value) {
+                        case '境外學者身分教授副教授助理教授或博士後研究員':
+                            switch ($value) {
                                 case "教授":
                                     $value = 1;
                                     break;
@@ -279,12 +279,12 @@ class ForeignProfSpeechLectureController extends Controller
         return redirect('foreign_prof_speech_lecture');
     }
 
-    public function example(Request $request) {
-        return response()->download(public_path().'/Excel_example/prof/foreign_prof_speech_lecture.xlsx', "本校教師赴國外出席國際會議.xlsx");
+    public function example (Request $request) {
+        return response()->download(public_path().'/Excel_example/prof/foreign_prof_speech_lecture.xlsx', "境外學者來校演講、研習或講學活動.xlsx");
     }
 
-    private function isAllNull($array) {
-        foreach($array as $item) {
+    private function isAllNull ($array) {
+        foreach ($array as $item) {
             if ($item != null)
                 return false;
         }
