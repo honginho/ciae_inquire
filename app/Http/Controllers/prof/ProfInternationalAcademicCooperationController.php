@@ -204,8 +204,8 @@ class ProfInternationalAcademicCooperationController extends Controller
                     '身分教授副教授助理教授或博士後研究員' => 'required|max:11',
                     '合作國家' => 'required|max:20',
                     '計畫名稱' => 'required|max:200',
-                    '執行期限（起）' => 'required|date',
-                    '執行期限（迄）' => 'required|date',
+                    '執行期限起' => 'required|date',
+                    '執行期限迄' => 'required|date',
                     '總核定金額' => 'required|max:11',
                     '備註' => 'max:500',
                 ];
@@ -225,7 +225,7 @@ class ProfInternationalAcademicCooperationController extends Controller
                             unset($item[$key]);
                             break;
                         case '所屬系所部門':
-                            $item['dept'] = $value; 
+                            $item['dept'] = $value;
                             unset($item[$key]);
                             break;
                         case '姓名':
@@ -241,7 +241,7 @@ class ProfInternationalAcademicCooperationController extends Controller
                                     $value = 2;
                                     break;
                                 case "助理教授":
-                                    $value = 3; 
+                                    $value = 3;
                                     break;
                                 case "博士後研究員":
                                     $value = 4;
@@ -261,11 +261,11 @@ class ProfInternationalAcademicCooperationController extends Controller
                             $item['projectName'] = $value;
                             unset($item[$key]);
                             break;
-                        case '執行期限（起）':
+                        case '執行期限起':
                             $item['startDate'] = $value;
                             unset($item[$key]);
                             break;
-                        case '執行期限（迄）':
+                        case '執行期限迄':
                             $item['endDate'] = $value;
                             unset($item[$key]);
                             break;
@@ -304,7 +304,7 @@ class ProfInternationalAcademicCooperationController extends Controller
     }
 
     public function example (Request $request) {
-        return response()->download(public_path().'/Excel_example/prof/prof_international_academic_cooperation.xlsx', "本校教師赴國外出席國際會議.xlsx");
+        return response()->download(public_path().'/Excel_example/prof/prof_international_academic_cooperation.xlsx', "與國外及兩岸學校進行學術合作交流.xlsx");
     }
 
     private function isAllNull ($array) {
