@@ -13,7 +13,7 @@ use App\CollegeData;
 
 class HoldInternationalConferenceController extends Controller
 {
-    public function index(Request $request) {
+    public function index (Request $request) {
     	$sortBy = 'id';
         $orderBy = "desc";
         $user = Auth::user();
@@ -41,8 +41,7 @@ class HoldInternationalConferenceController extends Controller
     	return view ('other/hold_international_conference', $data);
     }
 
-    public function insert(Request $request) {
-
+    public function insert (Request $request) {
         $rules = [
             'academicYear' => 'required|max:11',
             'college' => 'required|max:11',
@@ -135,7 +134,7 @@ class HoldInternationalConferenceController extends Controller
         return view('other/hold_international_conference', $data);
     }
 
-    public function delete($id) {
+    public function delete ($id) {
         $holdinternationalconference = HoldInternationalConference::find($id);
         if(!Gate::allows('permission', $holdinternationalconference))
             return redirect('hold_international_conference');
@@ -143,13 +142,14 @@ class HoldInternationalConferenceController extends Controller
         return redirect('hold_international_conference');
     }
 
-    public function edit($id) {
+    public function edit ($id) {
         $holdinternationalconference = HoldInternationalConference::find($id);
         if(Gate::allows('permission', $holdinternationalconference))
             return view('other/hold_international_conference_edit', $holdinternationalconference);
         return redirect('hold_international_conference');
     }
-    public function update($id, Request $request) {
+
+    public function update ($id, Request $request) {
         $holdinternationalconference = HoldInternationalConference::find($id);
         if(!Gate::allows('permission', $holdinternationalconference))
             return redirect('hold_international_conference');
@@ -186,8 +186,7 @@ class HoldInternationalConferenceController extends Controller
         return redirect('hold_international_conference')->with('success', '更新成功');
     }
 
-
-    public function upload(Request $request) {
+    public function upload (Request $request) {
         Excel::load($request->file('file'), function ($reader) {
             $array = $reader->toArray();
             $newArray = [];
@@ -204,9 +203,9 @@ class HoldInternationalConferenceController extends Controller
                     '舉辦方式代碼' => 'required|max:11',
                     '舉辦方式' => 'required|max:20',
                     '會議名稱' => 'required|max:200',
-                    '會議舉行國家/地區代碼' => 'required|max:11',
-                    '會議開始時間' => 'required|date',
-                    '會議結束時間' => 'required|date',
+                    '會議舉行國家地區代碼' => 'required|max:11',
+                    '開始時間' => 'required|date',
+                    '結束時間' => 'required|date',
                     '備註' => 'max:500',
                 ];
                 $message = [
@@ -246,11 +245,11 @@ class HoldInternationalConferenceController extends Controller
                             $item['confHoldNationId'] = $value;
                             unset($item[$key]);
                             break;
-                        case '會議開始時間':
+                        case '開始時間':
                             $item['startDate'] = $value;
                             unset($item[$key]);
                             break;
-                        case '會議結束時間':
+                        case '結束時間':
                             $item['endDate'] = $value;
                             unset($item[$key]);
                             break;
@@ -283,11 +282,11 @@ class HoldInternationalConferenceController extends Controller
         return redirect('hold_international_conference');
     }
 
-    public function example(Request $request) {
-        return response()->download(public_path().'/Excel_example/other/hold_international_conference.xlsx', "本校教師赴國外研究.xlsx");
+    public function example (Request $request) {
+        return response()->download(public_path().'/Excel_example/other/hold_international_conference.xlsx', "辦理國際及兩岸學術研討會.xlsx");
     }
 
-    private function isAllNull($array) {
+    private function isAllNull ($array) {
         foreach ($array as $item) {
             if ($item != null)
                 return false;
