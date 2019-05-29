@@ -15,20 +15,20 @@ class ForeignProfVistController extends Controller
 {
     //
     public function index(Request $request){
-    	$sortBy = 'id';
+        $sortBy = 'id';
         $orderBy = "desc";
         $user = Auth::user();
-        
+
         if($request->sortBy != null)
             $sortBy = $request->sortBy;
         if($request->orderBy != null)
             $orderBy = $request->orderBy;
 
-    	$foreignPvist=ForeignProfVist::join('college_data',function($join){
+        $foreignPvist=ForeignProfVist::join('college_data',function($join){
             $join->on('foreign_prof_vist.college','college_data.college');
             $join->on('foreign_prof_vist.dept','college_data.dept');
         });
-        
+
         if($user->permission == 2){
             $foreignPvist = $foreignPvist->where('foreign_prof_vist.college',$user->college);
         }else if($user->permission == 3){
@@ -39,12 +39,12 @@ class ForeignProfVistController extends Controller
             ->paginate(20);
         $foreignPvist->appends($request->except('page'));
 
-    	$data=compact('foreignPvist','user');
-    	return view ('prof/foreign_prof_vist',$data);
+        $data=compact('foreignPvist','user');
+        return view ('prof/foreign_prof_vist',$data);
     }
 
     public function insert(Request $request){
-        
+
         $rules=[
             'college'=>'required|max:11',
             'dept'=>'required|max:11',
@@ -78,15 +78,15 @@ class ForeignProfVistController extends Controller
 
     public function search (Request $request){
 
-    	$sortBy = 'id';
+        $sortBy = 'id';
         $orderBy = "desc";
         $user = Auth::user();
-        
+
         if($request->sortBy != null)
             $sortBy = $request->sortBy;
         if($request->orderBy != null)
             $orderBy = $request->orderBy;
-        
+
         $foreignPvist = ForeignProfVist::join('college_data',function($join){
                 $join->on('foreign_prof_vist.college','college_data.college');
                 $join->on('foreign_prof_vist.dept','college_data.dept');
@@ -99,10 +99,10 @@ class ForeignProfVistController extends Controller
                 ->where('foreign_prof_vist.dept',$request->dept);
         if($request->name != "")
             $foreignPvist = $foreignPvist
-                ->where('name',"like","%$request->name%");        
+                ->where('name',"like","%$request->name%");
         if($request->profLevel != "")
             $foreignPvist = $foreignPvist
-                ->where('profLevel', $request->profLevel);                
+                ->where('profLevel', $request->profLevel);
         if($request->nation != "")
             $foreignPvist = $foreignPvist
                 ->where('nation',"like","%$request->nation%");
@@ -125,7 +125,7 @@ class ForeignProfVistController extends Controller
 
         $foreignPvist = $foreignPvist->orderBy($sortBy,$orderBy)
             ->paginate(20);
-        $foreignPvist->appends($request->except('page'));    
+        $foreignPvist->appends($request->except('page'));
 
         $data = compact('foreignPvist','user');
         return view('prof/foreign_prof_vist',$data);
@@ -173,6 +173,7 @@ class ForeignProfVistController extends Controller
         $foreignPvist->update($request->all());
         return redirect('foreign_prof_vist')->with('success','更新成功');
     }
+
     public function delete($id){
         $foreignPvist = ForeignProfVist::find($id);
         if(!Gate::allows('permission',$foreignPvist))
@@ -186,10 +187,9 @@ class ForeignProfVistController extends Controller
             $array = $reader->toArray();
             $newArray = [];
             foreach ($array as $arrayKey => $item) {
-
                 if($this->isAllNull($item))
                     continue;
-                    
+
                 $errorLine = $arrayKey + 2;
                 $rules = [
                         '邀請單位一級單位名稱'=>'required|max:11',
@@ -209,7 +209,6 @@ class ForeignProfVistController extends Controller
                 $validator = Validator::make($item,$rules,$message);
 
                 foreach ($item as $key => $value) {
-
                     switch ($key) {
                         case '邀請單位一級單位名稱':
                             $item['college'] = $value;
@@ -276,7 +275,7 @@ class ForeignProfVistController extends Controller
                 if(!Gate::allows('permission',(object)$item)){
                     $validator->errors()->add('permission',"無法新增未有權限之系所部門,第 $errorLine 行");
                 }
-                 if(count($validator->errors())>0){
+                if(count($validator->errors())>0){
                     return redirect('foreign_prof_vist')
                         ->withErrors($validator,"upload");
                 }
