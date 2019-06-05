@@ -12,26 +12,29 @@
 	<div class="col-md-12">
 		<div class="panel panel-default">
 			<div class="panel-body">
-			<ul class="nav nav-tabs">
-                @if(count($errors)>0)
-					<li><a href="#show" data-toggle="tab">檢視</a></li>
-					<li class="active"><a href="#insert" data-toggle="tab">新增</a></li>
-					<li><a href="#search" data-toggle="tab">進階搜尋</a></li>
-					<li><a href="#upload" data-toggle="tab">批次上傳</a></li>
-				@elseif(count($errors->upload)>0)
-					<li><a href="#show" data-toggle="tab">檢視</a></li>
-					<li><a href="#insert" data-toggle="tab">新增</a></li>
-					<li><a href="#search" data-toggle="tab">進階搜尋</a></li>
-					<li class="active"><a href="#upload" data-toggle="tab">批次上傳</a></li>
-				@else
-					<li class="active"><a href="#show" data-toggle="tab">檢視</a></li>
-					<li><a href="#insert" data-toggle="tab">新增</a></li>
-					<li><a href="#search" data-toggle="tab">進階搜尋</a></li>
-					<li><a href="#upload" data-toggle="tab">批次上傳</a></li>
-				@endif
-            </ul>
+				<ul class="nav nav-tabs">
+					@if(count($errors)>0)
+						<li><a href="#show" data-toggle="tab">檢視</a></li>
+						<li class="active"><a href="#insert" data-toggle="tab">新增</a></li>
+						<li><a href="#search" data-toggle="tab">進階搜尋</a></li>
+						<li><a href="#upload" data-toggle="tab">批次上傳</a></li>
+						<li><a href="#download" data-toggle="tab">資料下載</a></li>
+					@elseif(count($errors->upload)>0)
+						<li><a href="#show" data-toggle="tab">檢視</a></li>
+						<li><a href="#insert" data-toggle="tab">新增</a></li>
+						<li><a href="#search" data-toggle="tab">進階搜尋</a></li>
+						<li class="active"><a href="#upload" data-toggle="tab">批次上傳</a></li>
+						<li><a href="#download" data-toggle="tab">資料下載</a></li>
+					@else
+						<li class="active"><a href="#show" data-toggle="tab">檢視</a></li>
+						<li><a href="#insert" data-toggle="tab">新增</a></li>
+						<li><a href="#search" data-toggle="tab">進階搜尋</a></li>
+						<li><a href="#upload" data-toggle="tab">批次上傳</a></li>
+						<li><a href="#download" data-toggle="tab">資料下載</a></li>
+					@endif
+				</ul>
 				<div class="tab-content">
-					@if(count($errors)>0||count($errors->upload)>0)
+					@if(count($errors)>0||count($errors->upload)>0||count($errors->download)>0)
 						<div class="tab-pane fade in table-responsive" id="show"
 							style="margin-top: 10px">
 					@else
@@ -275,9 +278,11 @@
 								<li>其餘欄位若有限制請參照該欄位括弧中選項填入</li>
 							</ul>
 						</div>
-
 					</div>
 
+					<div class="tab-pane fade in col-md-12" id="download" style="margin-top: 10px;">
+						<a class="btn btn-success" href="{{url('foreign_prof_vist/download')}}">下載所有資料</a>
+					</div>
 				</div>
 			</div>
 		</div>

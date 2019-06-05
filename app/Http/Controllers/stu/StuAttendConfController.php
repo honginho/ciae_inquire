@@ -2,218 +2,245 @@
 
 namespace App\Http\Controllers\stu;
 
-use Illuminate\Http\Request;
+use App\CollegeData;
 use App\Http\Controllers\Controller;
 use App\StuAttendConf;
+use Excel;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
-use Excel;
 use Validator;
-use App\CollegeData;
 
 class StuAttendConfController extends Controller
 {
-    //
-    public function index (Request $request){
-    	$sortBy = 'id';
+    public function index(Request $request) {
+        $sortBy  = 'id';
         $orderBy = "desc";
-    	$user = Auth::user();
-        
-        if($request->sortBy != null)
+        $user    = Auth::user();
+
+        if ($request->sortBy != null) {
             $sortBy = $request->sortBy;
-        if($request->orderBy != null)
+        }
+
+        if ($request->orderBy != null) {
             $orderBy = $request->orderBy;
+        }
 
-    	$conf = StuAttendConf::join('college_data',function($join){
-    		$join->on('stu_attend_conf.college','college_data.college');
-    		$join->on('stu_attend_conf.dept','college_data.dept');
-    		});
+        $conf = StuAttendConf::join('college_data', function ($join) {
+            $join->on('stu_attend_conf.college', 'college_data.college');
+            $join->on('stu_attend_conf.dept', 'college_data.dept');
+        });
 
-        if($user->permission == 2){
-            $conf = $conf->where('stu_attend_conf.college',$user->college);
-        }else if($user->permission == 3){
-            $conf = $conf->where('stu_attend_conf.college',$user->college)
+        if ($user->permission == 2) {
+            $conf = $conf->where('stu_attend_conf.college', $user->college);
+        } else if ($user->permission == 3) {
+            $conf = $conf->where('stu_attend_conf.college', $user->college)
                 ->where('stu_attend_conf.dept', $user->dept);
         }
 
-        $conf = $conf->orderBy($sortBy,$orderBy)
+        $conf = $conf->orderBy($sortBy, $orderBy)
             ->paginate(20);
-        $conf->appends($request->except('page'));  
-    	$data=compact('conf','user');
-    	return view ('stu/stu_attend_conf',$data);
-    	}
+        $conf->appends($request->except('page'));
+        $data = compact('conf', 'user');
+        return view('stu/stu_attend_conf', $data);
+    }
 
-    public function insert(Request $request){
-
-        $rules=[
-            'college'=>'required|max:11',
-            'dept'=>'required|max:11',
-            'name'=>'required|max:20',
-            'stuLevel'=>'required|max:11',
-            'nation'=>'required|max:20',
-            'confName'=>'required|max:200',
-            'startDate'=>'required',
-            'endDate'=>'required',
-            'comments'=>'max:500',
+    public function insert(Request $request) {
+        $rules = [
+            'college'   => 'required|max:11',
+            'dept'      => 'required|max:11',
+            'name'      => 'required|max:20',
+            'stuLevel'  => 'required|max:11',
+            'nation'    => 'required|max:20',
+            'confName'  => 'required|max:200',
+            'startDate' => 'required',
+            'endDate'   => 'required',
+            'comments'  => 'max:500',
         ];
 
-        $message=[
-            'required'=>'必須填寫:attribute欄位',
-            'max'=>':attribute欄位的輸入長度不能大於:max',
+        $message = [
+            'required' => '必須填寫:attribute欄位',
+            'max'      => ':attribute欄位的輸入長度不能大於:max',
         ];
 
-        $validator=Validator::make($request->all(),$rules,$message);
+        $validator = Validator::make($request->all(), $rules, $message);
 
-        if($request->startDate > $request->endDate){
-            $validator->errors()->add('endDate','開始時間必須在結束時間前');
+        if ($request->startDate > $request->endDate) {
+            $validator->errors()->add('endDate', '開始時間必須在結束時間前');
             return redirect('stu_attend_conf')->withErrors($validator)->withInput();
         }
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             return redirect('stu_attend_conf')->withErrors($validator)->withInput();
         }
 
         StuAttendConf::create($request->all());
-        return redirect('stu_attend_conf')->with('success','新增成功');
+        return redirect('stu_attend_conf')->with('success', '新增成功');
     }
 
-    public function search (Request $request){
-
-    	$sortBy = 'id';
+    public function search(Request $request) {
+        $sortBy  = 'id';
         $orderBy = "desc";
-        $user = Auth::user();
-        
-        if($request->sortBy != null)
+        $user    = Auth::user();
+
+        if ($request->sortBy != null) {
             $sortBy = $request->sortBy;
-        if($request->orderBy != null)
+        }
+
+        if ($request->orderBy != null) {
             $orderBy = $request->orderBy;
-        
-        $conf = StuAttendConf::join('college_data',function($join){
-                $join->on('stu_attend_conf.college','college_data.college');
-                $join->on('stu_attend_conf.dept','college_data.dept');
-            });
-        if($request->college != 0)
+        }
+
+        $conf = StuAttendConf::join('college_data', function ($join) {
+            $join->on('stu_attend_conf.college', 'college_data.college');
+            $join->on('stu_attend_conf.dept', 'college_data.dept');
+        });
+        if ($request->college != 0) {
             $conf = $conf
-                ->where('stu_attend_conf.college',$request->college);
-        if($request->dept != 0)
+                ->where('stu_attend_conf.college', $request->college);
+        }
+
+        if ($request->dept != 0) {
             $conf = $conf
-                ->where('stu_attend_conf.dept',$request->dept);
-        if($request->name != "")
+                ->where('stu_attend_conf.dept', $request->dept);
+        }
+
+        if ($request->name != "") {
             $conf = $conf
-                ->where('name',"like","%$request->name%");        
-        if($request->stuLevel != "")
+                ->where('name', "like", "%$request->name%");
+        }
+
+        if ($request->stuLevel != "") {
             $conf = $conf
-                ->where('stuLevel', $request->stuLevel);                
-        if($request->nation != "")
+                ->where('stuLevel', $request->stuLevel);
+        }
+
+        if ($request->nation != "") {
             $conf = $conf
-                ->where('nation',"like","%$request->nation%");
-        if($request->confName != "")
+                ->where('nation', "like", "%$request->nation%");
+        }
+
+        if ($request->confName != "") {
             $conf = $conf
-                ->where('confName',"like","%$request->confName%"); 
-        if($request->startDate != "")
+                ->where('confName', "like", "%$request->confName%");
+        }
+
+        if ($request->startDate != "") {
             $conf = $conf
-                ->where('startDate','>=',"$request->startDate");
-        if($request->endDate != "")
+                ->where('startDate', '>=', "$request->startDate");
+        }
+
+        if ($request->endDate != "") {
             $conf = $conf
-                ->where('endDate','<=',"$request->endDate"); 
-        if($request->comments != "")
+                ->where('endDate', '<=', "$request->endDate");
+        }
+
+        if ($request->comments != "") {
             $conf = $conf
-                ->where('comments',"like","%$request->comments%");
-        
-        if($user->permission == 2){
-            $conf = $conf->where('stu_attend_conf.college',$user->college);
-        }else if($user->permission == 3){
-            $conf = $conf->where('stu_attend_conf.college',$user->college)
+                ->where('comments', "like", "%$request->comments%");
+        }
+
+        if ($user->permission == 2) {
+            $conf = $conf->where('stu_attend_conf.college', $user->college);
+        } else if ($user->permission == 3) {
+            $conf = $conf->where('stu_attend_conf.college', $user->college)
                 ->where('stu_attend_conf.dept', $user->dept);
         }
 
-        $conf = $conf->orderBy($sortBy,$orderBy)
+        $conf = $conf->orderBy($sortBy, $orderBy)
             ->paginate(20);
-        $conf->appends($request->except('page'));    
-        $data = compact('conf','user');
-        return view('stu/stu_attend_conf',$data);
-    }	
-     public function delete($id){
+        $conf->appends($request->except('page'));
+        $data = compact('conf', 'user');
+        return view('stu/stu_attend_conf', $data);
+    }
+
+    public function edit($id) {
         $conf = StuAttendConf::find($id);
-        if(!Gate::allows('permission',$conf))
+
+        if (Gate::allows('permission', $conf)) {
+            return view('stu/stu_attend_conf_edit', $conf);
+        }
+
+        return redirect('stu_attend_conf');
+    }
+
+    public function update($id, Request $request) {
+        $conf = StuAttendConf::find($id);
+        if (!Gate::allows('permission', $conf)) {
             return redirect('stu_attend_conf');
+        }
+
+        $rules = [
+            'college'   => 'required|max:11',
+            'dept'      => 'required|max:11',
+            'name'      => 'required|max:20',
+            'stuLevel'  => 'required|max:11',
+            'nation'    => 'required|max:20',
+            'confName'  => 'required|max:200',
+            'startDate' => 'required',
+            'endDate'   => 'required',
+            'comments'  => 'max:500',
+        ];
+
+        $message = [
+            'required' => '必須填寫:attribute欄位',
+            'max'      => ':attribute欄位的輸入長度不能大於:max',
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $message);
+
+        if ($request->startDate > $request->endDate) {
+            $validator->errors()->add('endDate', '開始時間必須在結束時間前');
+            return redirect("stu_attend_conf/$id")->withErrors($validator)->withInput();
+        }
+
+        if ($validator->fails()) {
+            return redirect("stu_attend_conf/$id")->withErrors($validator)->withInput();
+        }
+
+        $conf->update($request->all());
+        return redirect('stu_attend_conf')->with('success', '更新成功');
+    }
+
+    public function delete($id) {
+        $conf = StuAttendConf::find($id);
+        if (!Gate::allows('permission', $conf)) {
+            return redirect('stu_attend_conf');
+        }
+
         $conf->delete();
         return redirect('stu_attend_conf');
     }
 
-
-    public function edit($id){
-        $conf = StuAttendConf::find($id);
-
-        if(Gate::allows('permission',$conf))
-            return view('stu/stu_attend_conf_edit',$conf);
-        return redirect('stu_attend_conf');
-    }
-
-public function update($id,Request $request){
-        $conf = StuAttendConf::find($id);
-        if(!Gate::allows('permission',$conf))
-            return redirect('stu_attend_conf');
-        $rules=[
-            'college'=>'required|max:11',
-            'dept'=>'required|max:11',
-            'name'=>'required|max:20',
-            'stuLevel'=>'required|max:11',
-            'nation'=>'required|max:20',
-            'confName'=>'required|max:200',
-            'startDate'=>'required',
-            'endDate'=>'required',
-            'comments'=>'max:500',
-        ];
-
-        $message=[
-            'required'=>'必須填寫:attribute欄位',
-            'max'=>':attribute欄位的輸入長度不能大於:max',
-        ];
-
-        $validator=Validator::make($request->all(),$rules,$message);
-
-        if($request->startDate > $request->endDate){
-            $validator->errors()->add('endDate','開始時間必須在結束時間前');
-            return redirect("stu_attend_conf/$id")->withErrors($validator)->withInput();
-        }
-
-        if($validator->fails()){
-            return redirect("stu_attend_conf/$id")->withErrors($validator)->withInput();
-        }
-        
-        $conf->update($request->all());
-        return redirect('stu_attend_conf')->with('success','更新成功');
-    }
-
-    public function upload(Request $request){
-        Excel::load($request->file('file'),function($reader){
-            $array = $reader->toArray();
+    public function upload(Request $request) {
+        Excel::load($request->file('file'), function ($reader) {
+            $array    = $reader->toArray();
             $newArray = [];
             foreach ($array as $arrayKey => $item) {
 
-                if($this->isAllNull($item))
+                if ($this->isAllNull($item)) {
                     continue;
-                    
+                }
+
                 $errorLine = $arrayKey + 2;
-                $rules=[
-                    '所屬一級單位'=>'required|max:11',
-                    '所屬系所部門'=>'required|max:11',
-                    '姓名'=>'required|max:20',
-                    '身分學士碩士或博士'=>'required|max:11',
-                    '前往國家'=>'required|max:20',
-                    '會議名稱'=>'required|max:200',
-                    '開始時間'=>'required|date',
-                    '結束時間'=>'required|date',
-                    '備註'=>'max:500',
+                $rules     = [
+                    '所屬一級單位'    => 'required|max:11',
+                    '所屬系所部門'    => 'required|max:11',
+                    '姓名'        => 'required|max:20',
+                    '身分學士碩士或博士' => 'required|max:11',
+                    '前往國家'      => 'required|max:20',
+                    '會議名稱'      => 'required|max:200',
+                    '開始時間'      => 'required|date',
+                    '結束時間'      => 'required|date',
+                    '備註'        => 'max:500',
                 ];
 
-                $message=[
-                    'required'=>'必須填寫:attribute欄位',
-                    'max'=>':attribute欄位的輸入長度不能大於:max',
-                    'date'=>':attribute 欄位時間格式錯誤, 應為 xxxx/xx/xx'.", 第 $errorLine 行"
+                $message = [
+                    'required' => '必須填寫:attribute欄位',
+                    'max'      => ':attribute欄位的輸入長度不能大於:max',
+                    'date'     => ':attribute 欄位時間格式錯誤, 應為 xxxx/xx/xx' . ", 第 $errorLine 行",
                 ];
-                $validator = Validator::make($item,$rules,$message);
+                $validator = Validator::make($item, $rules, $message);
 
                 foreach ($item as $key => $value) {
 
@@ -231,7 +258,7 @@ public function update($id,Request $request){
                             unset($item[$key]);
                             break;
                         case '身分學士碩士或博士':
-                            switch($value){
+                            switch ($value) {
                                 case "學士":
                                     $value = 3;
                                     break;
@@ -242,7 +269,7 @@ public function update($id,Request $request){
                                     $value = 1;
                                     break;
                                 default:
-                                    $validator->errors()->add('身分',"身分內容填寫錯誤,第 $errorLine 行");
+                                    $validator->errors()->add('身分', "身分內容填寫錯誤,第 $errorLine 行");
                                     break;
                             }
                             $item['stuLevel'] = $value;
@@ -274,35 +301,99 @@ public function update($id,Request $request){
                     }
                 }
 
-                if($item['startDate'] > $item['endDate']){
-                    $validator->errors()->add('date','開始時間必須在結束時間前'.",第 $errorLine 行");
+                if ($item['startDate'] > $item['endDate']) {
+                    $validator->errors()->add('date', '開始時間必須在結束時間前' . ",第 $errorLine 行");
                 }
-                if(CollegeData::where('college',$item['college'])
-                        ->where('dept',$item['dept'])->first()==null){
-                    $validator->errors()->add('number','系所代碼錯誤'.",第 $errorLine 行");
+                if (CollegeData::where('college', $item['college'])
+                    ->where('dept', $item['dept'])->first() == null) {
+                    $validator->errors()->add('number', '系所代碼錯誤' . ",第 $errorLine 行");
                 }
-                if(!Gate::allows('permission',(object)$item)){
-                    $validator->errors()->add('permission','無法新增未有權限之系所部門'.",第 $errorLine 行");
+                if (!Gate::allows('permission', (object) $item)) {
+                    $validator->errors()->add('permission', '無法新增未有權限之系所部門' . ",第 $errorLine 行");
                 }
-                if(count($validator->errors())>0){
+                if (count($validator->errors()) > 0) {
                     return redirect('stu_attend_conf')
-                                ->withErrors($validator,"upload");
+                        ->withErrors($validator, "upload");
                 }
-                array_push($newArray,$item);
+                array_push($newArray, $item);
             }
             StuAttendConf::insert($newArray);
         });
         return redirect('stu_attend_conf');
     }
-    
-    public function example(Request $request){
-        return response()->download(public_path().'/Excel_example/stu/stu_attend_conf.xlsx',"本校學生赴國外出席國際會議.xlsx");
+
+    public function example(Request $request) {
+        return response()->download(public_path() . '/Excel_example/stu/stu_attend_conf.xlsx', "本校學生赴國外出席國際會議.xlsx");
     }
 
-    private function isAllNull($array){
-        foreach($array as $item){
-            if($item != null)
+    public function download(Request $request) {
+        $sortBy  = 'id';
+        $orderBy = "desc";
+        $user    = Auth::user();
+
+        if ($request->sortBy != null) {
+            $sortBy = $request->sortBy;
+        }
+
+        if ($request->orderBy != null) {
+            $orderBy = $request->orderBy;
+        }
+
+        $conf = StuAttendConf::join('college_data', function ($join) {
+            $join->on('stu_attend_conf.college', 'college_data.college');
+            $join->on('stu_attend_conf.dept', 'college_data.dept');
+        });
+
+        if ($user->permission == 2) {
+            $conf = $conf->where('stu_attend_conf.college', $user->college);
+        } else if ($user->permission == 3) {
+            $conf = $conf->where('stu_attend_conf.college', $user->college)
+                ->where('stu_attend_conf.dept', $user->dept);
+        }
+
+        $conf         = $conf->orderBy($sortBy, $orderBy)->get()->toArray();
+        $conf_array[] = array(/*'索引值',*/ '一級單位', '系所部門', '姓名', '身份', '前往國家', '會議名稱', '開始時間', '結束時間', '備註');
+        // dd($conf);
+        foreach ($conf as $conf_data) {
+            $stuLevel = $conf_data['stuLevel'];
+            if ($stuLevel == 1) $stuLevel = '博士班';
+            else if ($stuLevel == 2) $stuLevel = '碩士班';
+            else if ($stuLevel == 3) $stuLevel = '學士班';
+
+            $conf_array[] = array(
+                // 'id'         => $conf_data['id'],
+                'chtCollege' => $conf_data['chtCollege'],
+                'chtDept'    => $conf_data['chtDept'],
+                'name'       => $conf_data['name'],
+                'stuLevel'   => $stuLevel,
+                'nation'     => $conf_data['nation'],
+                'confName'   => $conf_data['confName'],
+                'startDate'  => $conf_data['startDate'],
+                'endDate'    => $conf_data['endDate'],
+                'comments'   => $conf_data['comments'],
+            );
+        }
+
+        Excel::create('本校學生赴國外出席國際會議', function ($excel) use ($conf_array) {
+            $excel->setTitle('本校學生赴國外出席國際會議');
+            $excel->sheet('表單', function ($sheet) use ($conf_array) {
+                // fromArray(5) parameter:
+                //   - source               要輸出的array
+                //   - nullValue            array資料內null的呈現方式，預設null
+                //   - startCell            資料起始位置，預設A1
+                //   - strictNullComparison 預設情況下0會視為空白，若要顯示0則需改成false，預設true
+                //   - headingGeneration    表頭是否自動產生。預設為true
+                // dd($conf_array);
+                $sheet->fromArray($conf_array, null, 'A1', false, false);
+            });
+        })->download('xlsx');
+    }
+
+    private function isAllNull($array) {
+        foreach ($array as $item) {
+            if ($item != null) {
                 return false;
+            }
         }
         return true;
     }

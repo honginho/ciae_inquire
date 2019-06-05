@@ -12,50 +12,41 @@
 	<div class="col-md-12">
 		<div class="panel panel-default">
 			<div class="panel-body">
-			<ul class="nav nav-tabs">
-				@if(count($errors)>0)
-	                <li><a href="#show" data-toggle="tab">檢視</a>
-	                </li>
-	                <li class="active"><a href="#insert" data-toggle="tab">新增</a>
-	                </li>
-	                <li><a href="#search" data-toggle="tab">進階搜尋</a>
-	                </li>
-	                <li><a href="#upload" data-toggle="tab">批次上傳</a>
-	                </li>
-				@elseif(count($errors->upload)>0)
-	                <li><a href="#show" data-toggle="tab">檢視</a>
-	                </li>
-	                <li><a href="#insert" data-toggle="tab">新增</a>
-	                </li>
-	                <li><a href="#search" data-toggle="tab">進階搜尋</a>
-	                </li>
-	                <li class="active"><a href="#upload" data-toggle="tab">批次上傳</a>
-	                </li>
-	            @else
-	           		<li class="active"><a href="#show" data-toggle="tab">檢視</a>
-	                </li>
-	                <li><a href="#insert" data-toggle="tab">新增</a>
-	                </li>
-	                <li><a href="#search" data-toggle="tab">進階搜尋</a>
-	                </li>
-	                <li><a href="#upload" data-toggle="tab">批次上傳</a>
-	                </li>
-	            @endif
-	        </ul>
-	      		<div class="tab-content">
+				<ul class="nav nav-tabs">
+					@if(count($errors)>0)
+						<li><a href="#show" data-toggle="tab">檢視</a></li>
+						<li class="active"><a href="#insert" data-toggle="tab">新增</a></li>
+						<li><a href="#search" data-toggle="tab">進階搜尋</a></li>
+						<li><a href="#upload" data-toggle="tab">批次上傳</a></li>
+						<li><a href="#download" data-toggle="tab">資料下載</a></li>
+					@elseif(count($errors->upload)>0)
+						<li><a href="#show" data-toggle="tab">檢視</a></li>
+						<li><a href="#insert" data-toggle="tab">新增</a></li>
+						<li><a href="#search" data-toggle="tab">進階搜尋</a></li>
+						<li class="active"><a href="#upload" data-toggle="tab">批次上傳</a></li>
+						<li><a href="#download" data-toggle="tab">資料下載</a></li>
+					@else
+						<li class="active"><a href="#show" data-toggle="tab">檢視</a></li>
+						<li><a href="#insert" data-toggle="tab">新增</a></li>
+						<li><a href="#search" data-toggle="tab">進階搜尋</a></li>
+						<li><a href="#upload" data-toggle="tab">批次上傳</a></li>
+						<li><a href="#download" data-toggle="tab">資料下載</a></li>
+					@endif
+				</ul>
+				<div class="tab-content">
 					@if(count($errors)>0||count($errors->upload)>0)
 						<div class="tab-pane fade in table-responsive" id="show" style="margin-top: 10px">
 					@else
 						<div class="tab-pane fade in active table-responsive" id="show" style="margin-top: 10px">
 					@endif
 						@if(session('success'))
-				        <div class="alert alert-success alert-dismissible" role="alert">
-				            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-				                <span aria-hidden="true">&times;</span>
-				            </button>
-				            <strong> {{ session('success') }}</strong>
-				        </div>
-			        	@endif
+						<div class="alert alert-success alert-dismissible" role="alert">
+							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+							<strong> {{ session('success') }}</strong>
+						</div>
+						@endif
 						<table width="100%" class="table table-striped table-bordered table-hover">
 							<thead>
 								<tr>
@@ -109,29 +100,31 @@
 									<td style="max-width: 140px">{{ $data->chtDept }}</td>
 									<td class="text-nowrap">{{ $data->name }}</td>
 									<td class="text-nowrap">@if($data->profLevel==1)
-									教授
-									@elseif($data->profLevel==2)
-									副教授
-									@elseif($data->profLevel==3)
-									助理教授
-									@elseif($data->profLevel==4)
-									博士後研究員
-									@elseif($data->profLevel==5)
-									研究生
-									@endif
+										教授
+										@elseif($data->profLevel==2)
+										副教授
+										@elseif($data->profLevel==3)
+										助理教授
+										@elseif($data->profLevel==4)
+										博士後研究員
+										@elseif($data->profLevel==5)
+										研究生
+										@endif
 									</td>
 									<td class="text-nowrap">{{ $data->nation }}</td>
-									<td >{{ $data->confName }}</td>
-									<td >{{ $data->publishedPaperName }}</td>
+									<td>{{ $data->confName }}</td>
+									<td>{{ $data->publishedPaperName }}</td>
 									<td class="text-nowrap">{{ $data->startDate }}</td>
 									<td class="text-nowrap">{{ $data->endDate }}</td>
-									<td >{{ $data->comments }}</td>
+									<td>{{ $data->comments }}</td>
 									<td class="text-nowrap">
 										@can('permission',$data)
-										<a href="{{ url('foreign_prof_attend_conference',$data->id) }}" class="glyphicon glyphicon-pencil btn btn-success btn-xs"></a>
-										<form action="{{ url('foreign_prof_attend_conference',$data->id) }}" method="post" style="display: inline;">
+										<a href="{{ url('foreign_prof_attend_conference',$data->id) }}"
+											class="glyphicon glyphicon-pencil btn btn-success btn-xs"></a>
+										<form action="{{ url('foreign_prof_attend_conference',$data->id) }}" method="post"
+											style="display: inline;">
 											{{ method_field('DELETE') }}
-                        					{{ csrf_field() }}
+											{{ csrf_field() }}
 											<button class="glyphicon glyphicon-trash btn btn-danger btn-xs" onclick="clickDel(event)"></button>
 										</form>
 										@endcan
@@ -220,11 +213,11 @@
 
 					<div class="tab-pane fade in col-md-12" id="search" style="margin-top: 10px;">
 						<div class="alert alert-success alert-dismissible" role="alert">
-				            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-				                <span aria-hidden="true">&times;</span>
-				            </button>
-				            <strong>不加入搜尋條件之選項留空即可</strong>
-				        </div>
+							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+							<strong>不加入搜尋條件之選項留空即可</strong>
+						</div>
 						<form action="{{ url('foreign_prof_attend_conference/search') }}">
 							@include('../layouts/select_search')
 							<div class="form-group">
@@ -280,19 +273,19 @@
 					@endif
 						<form action="{{ url('foreign_prof_attend_conference/upload') }}" method="post" enctype="multipart/form-data">
 							{{ csrf_field() }}
-                        	<div id="file_error"></div>
-                        	@if(count($errors->upload)>0)
-                        		<div class="alert alert-danger alert-dismissible" role="alert">
+							<div id="file_error"></div>
+							@if(count($errors->upload)>0)
+								<div class="alert alert-danger alert-dismissible" role="alert">
 									<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 										<span aria-hidden="true">&times;</span>
 									</button>
 									<strong>
 										@foreach($errors->upload->all() as $errors)
-											{{ $errors }}<br>
+										{{ $errors }}<br>
 										@endforeach
 									</strong>
 								</div>
-                        	@endif
+							@endif
 							<input type="file" name="file" id="file" style="margin: 2px">
 							<button class="btn btn-primary" style="margin: 2px" onclick="checkFile(event)">上傳</button>
 							<a class="btn btn-success" href="{{ url('foreign_prof_attend_conference/example') }}">範例檔案</a>
@@ -310,6 +303,10 @@
 								<li>其餘欄位若有限制請參照該欄位括弧中選項填入</li>
 							</ul>
 						</div>
+					</div>
+
+					<div class="tab-pane fade in col-md-12" id="download" style="margin-top: 10px;">
+						<a class="btn btn-success" href="{{url('foreign_prof_attend_conference/download')}}">下載所有資料</a>
 					</div>
 				</div>
 			</div>

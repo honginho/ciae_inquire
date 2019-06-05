@@ -2,63 +2,65 @@
 
 namespace App\Http\Controllers\prof;
 
-use Illuminate\Http\Request;
+use App\CollegeData;
 use App\Http\Controllers\Controller;
 use App\ProfInternationalAcademicCooperation;
+use Excel;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
-use Excel;
 use Validator;
-use App\CollegeData;
 
 class ProfInternationalAcademicCooperationController extends Controller
 {
-    public function index (Request $request) {
-        $sortBy = 'id';
+    public function index(Request $request) {
+        $sortBy  = 'id';
         $orderBy = "desc";
-        $user = Auth::user();
+        $user    = Auth::user();
 
-        if ($request->sortBy != null)
+        if ($request->sortBy != null) {
             $sortBy = $request->sortBy;
-        if ($request->orderBy != null)
-            $orderBy = $request->orderBy;
+        }
 
-    	$Pinternationalacademiccooperation = ProfInternationalAcademicCooperation::join('college_data', function ($join) {
+        if ($request->orderBy != null) {
+            $orderBy = $request->orderBy;
+        }
+
+        $Pinternationalacademiccooperation = ProfInternationalAcademicCooperation::join('college_data', function ($join) {
             $join->on('prof_international_academic_cooperation.college', 'college_data.college');
             $join->on('prof_international_academic_cooperation.dept', 'college_data.dept');
         });
 
         if ($user->permission == 2) {
             $Pinternationalacademiccooperation = $Pinternationalacademiccooperation->where('prof_international_academic_cooperation.college', $user->college);
-        }
-        else if ($user->permission == 3) {
+        } else if ($user->permission == 3) {
             $Pinternationalacademiccooperation = $Pinternationalacademiccooperation->where('prof_international_academic_cooperation.college', $user->college)
                 ->where('prof_international_academic_cooperation.dept', $user->dept);
         }
 
-        $Pinternationalacademiccooperation= $Pinternationalacademiccooperation->orderBy($sortBy, $orderBy)->paginate(20);
+        $Pinternationalacademiccooperation = $Pinternationalacademiccooperation->orderBy($sortBy, $orderBy)->paginate(20);
         $Pinternationalacademiccooperation->appends($request->except('page'));
-    	$data=compact('Pinternationalacademiccooperation', 'user');
-    	return view ('prof/prof_international_academic_cooperation', $data);
+        $data = compact('Pinternationalacademiccooperation', 'user');
+        return view('prof/prof_international_academic_cooperation', $data);
     }
 
-    public function insert (Request $request) {
-    	$rules = [
-            'college' => 'required|max:11',
-            'dept' => 'required|max:11',
-            'name' => 'required|max:20',
-            'profLevel' => 'required|max:11',
+    public function insert(Request $request) {
+        $rules = [
+            'college'       => 'required|max:11',
+            'dept'          => 'required|max:11',
+            'name'          => 'required|max:20',
+            'profLevel'     => 'required|max:11',
             'partnerNation' => 'required|max:20',
-            'projectName' => 'required|max:200',
-            'startDate' => 'required',
-            'endDate' => 'required',
-            'money' => 'required|max:11',
-            'comments' => 'max:500',
+            'projectName'   => 'required|max:200',
+            'startDate'     => 'required',
+            'endDate'       => 'required',
+            'money'         => 'required|max:11',
+            'comments'      => 'max:500',
         ];
 
         $message = [
             'required' => '必須填寫:attribute欄位',
-            'max' => ':attribute欄位的輸入長度不能大於:max',
+            'max'      => ':attribute欄位的輸入長度不能大於:max',
         ];
 
         $validator = Validator::make($request->all(), $rules, $message);
@@ -72,60 +74,81 @@ class ProfInternationalAcademicCooperationController extends Controller
             return redirect('prof_international_academic_cooperation')->withErrors($validator)->withInput();
         }
 
-    	ProfInternationalAcademicCooperation::create($request->all());
+        ProfInternationalAcademicCooperation::create($request->all());
         return redirect('prof_international_academic_cooperation')->with('success', '新增成功');
     }
 
-    public function search (Request $request) {
-        $sortBy = 'id';
+    public function search(Request $request) {
+        $sortBy  = 'id';
         $orderBy = "desc";
-        $user = Auth::user();
+        $user    = Auth::user();
 
-        if ($request->sortBy != null)
+        if ($request->sortBy != null) {
             $sortBy = $request->sortBy;
-        if ($request->orderBy != null)
+        }
+
+        if ($request->orderBy != null) {
             $orderBy = $request->orderBy;
+        }
 
         $Pinternationalacademiccooperation = ProfInternationalAcademicCooperation::join('college_data', function ($join) {
-                $join->on('prof_international_academic_cooperation.college', 'college_data.college');
-                $join->on('prof_international_academic_cooperation.dept', 'college_data.dept');
-            });
+            $join->on('prof_international_academic_cooperation.college', 'college_data.college');
+            $join->on('prof_international_academic_cooperation.dept', 'college_data.dept');
+        });
 
-        if ($request->college != 0)
+        if ($request->college != 0) {
             $Pinternationalacademiccooperation = $Pinternationalacademiccooperation
                 ->where('prof_international_academic_cooperation.college', $request->college);
-        if ($request->dept != 0)
+        }
+
+        if ($request->dept != 0) {
             $Pinternationalacademiccooperation = $Pinternationalacademiccooperation
                 ->where('prof_international_academic_cooperation.dept', $request->dept);
-        if ($request->name != "")
+        }
+
+        if ($request->name != "") {
             $Pinternationalacademiccooperation = $Pinternationalacademiccooperation
                 ->where('name', "like", "%$request->name%");
-        if ($request->profLevel != "")
+        }
+
+        if ($request->profLevel != "") {
             $Pinternationalacademiccooperation = $Pinternationalacademiccooperation
                 ->where('profLevel', $request->profLevel);
-        if ($request->partnerNation != "")
+        }
+
+        if ($request->partnerNation != "") {
             $Pinternationalacademiccooperation = $Pinternationalacademiccooperation
                 ->where('partnerNation', "like", "%$request->partnerNation%");
-        if ($request->projectName != "")
+        }
+
+        if ($request->projectName != "") {
             $Pinternationalacademiccooperation = $Pinternationalacademiccooperation
                 ->where('projectName', "like", "%$request->projectName%");
-        if ($request->startDate != "")
+        }
+
+        if ($request->startDate != "") {
             $Pinternationalacademiccooperation = $Pinternationalacademiccooperation
                 ->where('startDate', '>=', "$request->startDate");
-        if ($request->endDate != "")
+        }
+
+        if ($request->endDate != "") {
             $Pinternationalacademiccooperation = $Pinternationalacademiccooperation
                 ->where('endDate', '<=', "$request->endDate");
-        if ($request->money != "")
+        }
+
+        if ($request->money != "") {
             $Pinternationalacademiccooperation = $Pinternationalacademiccooperation
                 ->where('money', $request->money);
-        if ($request->comments != "")
+        }
+
+        if ($request->comments != "") {
             $Pinternationalacademiccooperation = $Pinternationalacademiccooperation
                 ->where('comments', "like", "%$request->comments%");
+        }
 
         if ($user->permission == 2) {
             $Pinternationalacademiccooperation = $Pinternationalacademiccooperation->where('prof_international_academic_cooperation.college', $user->college);
-        }
-        else if ($user->permission == 3) {
+        } else if ($user->permission == 3) {
             $Pinternationalacademiccooperation = $Pinternationalacademiccooperation->where('prof_international_academic_cooperation.college', $user->college)
                 ->where('prof_international_academic_cooperation.dept', $user->dept);
         }
@@ -136,33 +159,37 @@ class ProfInternationalAcademicCooperationController extends Controller
         return view('prof/prof_international_academic_cooperation', $data);
     }
 
-    public function edit ($id) {
+    public function edit($id) {
         $Pinternationalacademiccooperation = ProfInternationalAcademicCooperation::find($id);
-        if (Gate::allows('permission', $Pinternationalacademiccooperation))
+        if (Gate::allows('permission', $Pinternationalacademiccooperation)) {
             return view('prof/prof_international_academic_cooperation_edit', $Pinternationalacademiccooperation);
+        }
+
         return redirect('prof_international_academic_cooperation');
     }
 
-    public function update ($id, Request $request) {
+    public function update($id, Request $request) {
         $Pinternationalacademiccooperation = ProfInternationalAcademicCooperation::find($id);
-        if (!Gate::allows('permission', $Pinternationalacademiccooperation))
+        if (!Gate::allows('permission', $Pinternationalacademiccooperation)) {
             return redirect('prof_international_academic_cooperation');
+        }
+
         $rules = [
-            'college' => 'required|max:11',
-            'dept' => 'required|max:11',
-            'name' => 'required|max:20',
-            'profLevel' => 'required|max:11',
+            'college'       => 'required|max:11',
+            'dept'          => 'required|max:11',
+            'name'          => 'required|max:20',
+            'profLevel'     => 'required|max:11',
             'partnerNation' => 'required|max:20',
-            'projectName' => 'required|max:200',
-            'startDate' => 'required',
-            'endDate' => 'required',
-            'money' => 'required|max:11',
-            'comments' => 'max:500',
+            'projectName'   => 'required|max:200',
+            'startDate'     => 'required',
+            'endDate'       => 'required',
+            'money'         => 'required|max:11',
+            'comments'      => 'max:500',
         ];
 
-        $message=[
+        $message = [
             'required' => '必須填寫:attribute欄位',
-            'max' => ':attribute欄位的輸入長度不能大於:max',
+            'max'      => ':attribute欄位的輸入長度不能大於:max',
         ];
 
         $validator = Validator::make($request->all(), $rules, $message);
@@ -180,40 +207,43 @@ class ProfInternationalAcademicCooperationController extends Controller
         return redirect('prof_international_academic_cooperation')->with('success', '更新成功');
     }
 
-    public function delete ($id) {
+    public function delete($id) {
         $Pinternationalacademiccooperation = ProfInternationalAcademicCooperation::find($id);
-        if (!Gate::allows('permission', $Pinternationalacademiccooperation))
+        if (!Gate::allows('permission', $Pinternationalacademiccooperation)) {
             return redirect('prof_international_academic_cooperation');
+        }
+
         $Pinternationalacademiccooperation->delete();
         return redirect('prof_international_academic_cooperation');
     }
 
-    public function upload (Request $request) {
-        Excel::load($request->file('file'), function($reader) {
-            $array = $reader->toArray();
+    public function upload(Request $request) {
+        Excel::load($request->file('file'), function ($reader) {
+            $array    = $reader->toArray();
             $newArray = [];
             foreach ($array as $arrayKey => $item) {
-                if ($this->isAllNull($item))
+                if ($this->isAllNull($item)) {
                     continue;
+                }
 
                 $errorLine = $arrayKey + 2;
-                $rules = [
-                    '所屬一級單位' => 'required|max:11',
-                    '所屬系所部門' => 'required|max:11',
-                    '姓名' => 'required|max:20',
+                $rules     = [
+                    '所屬一級單位'             => 'required|max:11',
+                    '所屬系所部門'             => 'required|max:11',
+                    '姓名'                 => 'required|max:20',
                     '身分教授副教授助理教授或博士後研究員' => 'required|max:11',
-                    '合作國家' => 'required|max:20',
-                    '計畫名稱' => 'required|max:200',
-                    '執行期限起' => 'required|date',
-                    '執行期限迄' => 'required|date',
-                    '總核定金額' => 'required|max:11',
-                    '備註' => 'max:500',
+                    '合作國家'               => 'required|max:20',
+                    '計畫名稱'               => 'required|max:200',
+                    '執行期限起'              => 'required|date',
+                    '執行期限迄'              => 'required|date',
+                    '總核定金額'              => 'required|max:11',
+                    '備註'                 => 'max:500',
                 ];
 
                 $message = [
                     'required' => "必須填寫 :attribute 欄位, 第 $errorLine 行",
-                    'max' => ':attribute 欄位的輸入長度不能大於:max'.", 第 $errorLine 行",
-                    'date' => ':attribute 欄位時間格式錯誤, 應為 xxxx/xx/xx'.", 第 $errorLine 行"
+                    'max'      => ':attribute 欄位的輸入長度不能大於:max' . ", 第 $errorLine 行",
+                    'date'     => ':attribute 欄位時間格式錯誤, 應為 xxxx/xx/xx' . ", 第 $errorLine 行",
                 ];
 
                 $validator = Validator::make($item, $rules, $message);
@@ -233,7 +263,7 @@ class ProfInternationalAcademicCooperationController extends Controller
                             unset($item[$key]);
                             break;
                         case '身分教授副教授助理教授或博士後研究員':
-                            switch($value) {
+                            switch ($value) {
                                 case "教授":
                                     $value = 1;
                                     break;
@@ -284,16 +314,16 @@ class ProfInternationalAcademicCooperationController extends Controller
                 }
 
                 if ($item['startDate'] > $item['endDate']) {
-                    $validator->errors()->add('date', '開始時間必須在結束時間前'.", 第 $errorLine 行");
+                    $validator->errors()->add('date', '開始時間必須在結束時間前' . ", 第 $errorLine 行");
                 }
                 if (CollegeData::where('college', $item['college'])
-                        ->where('dept', $item['dept'])->first() == null) {
-                    $validator->errors()->add('number', '系所代碼錯誤'.", 第 $errorLine 行");
+                    ->where('dept', $item['dept'])->first() == null) {
+                    $validator->errors()->add('number', '系所代碼錯誤' . ", 第 $errorLine 行");
                 }
-                if (!Gate::allows('permission', (object)$item)) {
-                    $validator->errors()->add('permission', '無法新增未有權限之系所部門'.", 第 $errorLine 行");
+                if (!Gate::allows('permission', (object) $item)) {
+                    $validator->errors()->add('permission', '無法新增未有權限之系所部門' . ", 第 $errorLine 行");
                 }
-                if (count($validator->errors())>0) {
+                if (count($validator->errors()) > 0) {
                     return redirect('prof_international_academic_cooperation')->withErrors($validator, "upload");
                 }
                 array_push($newArray, $item);
@@ -303,14 +333,81 @@ class ProfInternationalAcademicCooperationController extends Controller
         return redirect('prof_international_academic_cooperation');
     }
 
-    public function example (Request $request) {
-        return response()->download(public_path().'/Excel_example/prof/prof_international_academic_cooperation.xlsx', "與國外及兩岸學校進行學術合作交流.xlsx");
+    public function example(Request $request) {
+        return response()->download(public_path() . '/Excel_example/prof/prof_international_academic_cooperation.xlsx', "與國外及兩岸學校進行學術合作交流.xlsx");
     }
 
-    private function isAllNull ($array) {
+    public function download(Request $request) {
+        $sortBy  = 'id';
+        $orderBy = "desc";
+        $user    = Auth::user();
+
+        if ($request->sortBy != null) {
+            $sortBy = $request->sortBy;
+        }
+
+        if ($request->orderBy != null) {
+            $orderBy = $request->orderBy;
+        }
+
+        $Pinternationalacademiccooperation = ProfInternationalAcademicCooperation::join('college_data', function ($join) {
+            $join->on('prof_international_academic_cooperation.college', 'college_data.college');
+            $join->on('prof_international_academic_cooperation.dept', 'college_data.dept');
+        });
+
+        if ($user->permission == 2) {
+            $Pinternationalacademiccooperation = $Pinternationalacademiccooperation->where('prof_international_academic_cooperation.college', $user->college);
+        } else if ($user->permission == 3) {
+            $Pinternationalacademiccooperation = $Pinternationalacademiccooperation->where('prof_international_academic_cooperation.college', $user->college)
+                ->where('prof_international_academic_cooperation.dept', $user->dept);
+        }
+
+        $Pinternationalacademiccooperation         = $Pinternationalacademiccooperation->orderBy($sortBy, $orderBy)->get()->toArray();
+        $Pinternationalacademiccooperation_array[] = array(/*'索引值',*/ '一級單位', '系所部門', '姓名', '身份', '合作國家', '計畫時間', '執行期限（起）', '執行期限（迄）', '總核定金額', '備註');
+        // dd($Pinternationalacademiccooperation);
+        foreach ($Pinternationalacademiccooperation as $Pinternationalacademiccooperation_data) {
+            $profLevel = $Pinternationalacademiccooperation_data['profLevel'];
+            if ($profLevel == 1) $profLevel = '教授';
+            else if ($profLevel == 2) $profLevel = '副教授';
+            else if ($profLevel == 3) $profLevel = '助理教授';
+            else if ($profLevel == 4) $profLevel = '博士後研究員';
+            else if ($profLevel == 5) $profLevel = '研究生';
+
+            $Pinternationalacademiccooperation_array[] = array(
+                // 'id'         => $Pinternationalacademiccooperation_data['id'],
+                'chtCollege'    => $Pinternationalacademiccooperation_data['chtCollege'],
+                'chtDept'       => $Pinternationalacademiccooperation_data['chtDept'],
+                'name'          => $Pinternationalacademiccooperation_data['name'],
+                'profLevel'     => $profLevel,
+                'partnerNation' => $Pinternationalacademiccooperation_data['partnerNation'],
+                'projectName'   => $Pinternationalacademiccooperation_data['projectName'],
+                'startDate'     => $Pinternationalacademiccooperation_data['startDate'],
+                'endDate'       => $Pinternationalacademiccooperation_data['endDate'],
+                'money'         => $Pinternationalacademiccooperation_data['money'],
+                'comments'      => $Pinternationalacademiccooperation_data['comments'],
+            );
+        }
+
+        Excel::create('與國外及兩岸學校進行學術合作交流', function ($excel) use ($Pinternationalacademiccooperation_array) {
+            $excel->setTitle('與國外及兩岸學校進行學術合作交流');
+            $excel->sheet('表單', function ($sheet) use ($Pinternationalacademiccooperation_array) {
+                // fromArray(5) parameter:
+                //   - source               要輸出的array
+                //   - nullValue            array資料內null的呈現方式，預設null
+                //   - startCell            資料起始位置，預設A1
+                //   - strictNullComparison 預設情況下0會視為空白，若要顯示0則需改成false，預設true
+                //   - headingGeneration    表頭是否自動產生。預設為true
+                // dd($Pinternationalacademiccooperation_array);
+                $sheet->fromArray($Pinternationalacademiccooperation_array, null, 'A1', false, false);
+            });
+        })->download('xlsx');
+    }
+
+    private function isAllNull($array) {
         foreach ($array as $item) {
-            if ($item != null)
+            if ($item != null) {
                 return false;
+            }
         }
         return true;
     }

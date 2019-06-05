@@ -2,61 +2,64 @@
 
 namespace App\Http\Controllers\prof;
 
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use App\CollegeData;
 use App\ForeignProfAttendConference;
+use App\Http\Controllers\Controller;
+use Excel;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
-use Excel;
 use Validator;
-use App\CollegeData;
 
 class ForeignProfAttendConferenceController extends Controller
 {
     public function index(Request $request) {
-        $sortBy = 'id';
+        $sortBy  = 'id';
         $orderBy = "desc";
-        $user = Auth::user();
+        $user    = Auth::user();
 
-        if ($request->sortBy != null)
+        if ($request->sortBy != null) {
             $sortBy = $request->sortBy;
-        if ($request->orderBy != null)
-            $orderBy = $request->orderBy;
+        }
 
-    	$foreignPattendconference = ForeignProfAttendConference::join('college_data', function ($join) {
+        if ($request->orderBy != null) {
+            $orderBy = $request->orderBy;
+        }
+
+        $foreignPattendconference = ForeignProfAttendConference::join('college_data', function ($join) {
             $join->on('foreign_prof_attend_conference.college', 'college_data.college');
             $join->on('foreign_prof_attend_conference.dept', 'college_data.dept');
         });
 
         if ($user->permission == 2) {
             $foreignPattendconference = $foreignPattendconference->where('foreign_prof_attend_conference.college', $user->college);
-        }
-        else if ($user->permission == 3) {
+        } else if ($user->permission == 3) {
             $foreignPattendconference = $foreignPattendconference->where('foreign_prof_attend_conference.college', $user->college)->where('foreign_prof_attend_conference.dept', $user->dept);
         }
 
         $foreignPattendconference = $foreignPattendconference->orderBy($sortBy, $orderBy)->paginate(20);
         $foreignPattendconference->appends($request->except('page'));
-    	$data = compact('foreignPattendconference', 'user');
-    	return view ('prof/foreign_prof_attend_conference', $data);
+        $data = compact('foreignPattendconference', 'user');
+        return view('prof/foreign_prof_attend_conference', $data);
     }
+
     public function insert(Request $request) {
-    	 $rules = [
-            'college' => 'required|max:11',
-            'dept' => 'required|max:11',
-            'name' => 'required|max:20',
-            'profLevel' => 'required|max:11',
-            'nation' => 'required|max:20',
-            'confName' => 'required|max:200',
+        $rules = [
+            'college'            => 'required|max:11',
+            'dept'               => 'required|max:11',
+            'name'               => 'required|max:20',
+            'profLevel'          => 'required|max:11',
+            'nation'             => 'required|max:20',
+            'confName'           => 'required|max:200',
             'publishedPaperName' => 'required|max:100',
-            'startDate' => 'required',
-            'endDate' => 'required',
-            'comments' => 'max:500',
+            'startDate'          => 'required',
+            'endDate'            => 'required',
+            'comments'           => 'max:500',
         ];
 
         $message = [
             'required' => '必須填寫:attribute欄位',
-            'max' => ':attribute欄位的輸入長度不能大於:max',
+            'max'      => ':attribute欄位的輸入長度不能大於:max',
         ];
 
         $validator = Validator::make($request->all(), $rules, $message);
@@ -70,58 +73,80 @@ class ForeignProfAttendConferenceController extends Controller
             return redirect('foreign_prof_attend_conference')->withErrors($validator)->withInput();
         }
 
-    	ForeignProfAttendConference::create($request->all());
+        ForeignProfAttendConference::create($request->all());
         return redirect('foreign_prof_attend_conference')->with('success', '新增成功');
     }
 
-    public function search (Request $request) {
-        $sortBy = 'id';
+    public function search(Request $request) {
+        $sortBy  = 'id';
         $orderBy = "desc";
-        $user = Auth::user();
+        $user    = Auth::user();
 
-        if ($request->sortBy != null)
+        if ($request->sortBy != null) {
             $sortBy = $request->sortBy;
-        if ($request->orderBy != null)
+        }
+
+        if ($request->orderBy != null) {
             $orderBy = $request->orderBy;
+        }
 
         $foreignPattendconference = ForeignProfAttendConference::join('college_data', function ($join) {
-                $join->on('foreign_prof_attend_conference.college', 'college_data.college');
-                $join->on('foreign_prof_attend_conference.dept', 'college_data.dept');
+            $join->on('foreign_prof_attend_conference.college', 'college_data.college');
+            $join->on('foreign_prof_attend_conference.dept', 'college_data.dept');
         });
-        if ($request->college != 0)
+        if ($request->college != 0) {
             $foreignPattendconference = $foreignPattendconference
                 ->where('foreign_prof_attend_conference.college', $request->college);
-        if ($request->dept != 0)
+        }
+
+        if ($request->dept != 0) {
             $foreignPattendconference = $foreignPattendconference
                 ->where('foreign_prof_attend_conference.dept', $request->dept);
-        if ($request->name != "")
+        }
+
+        if ($request->name != "") {
             $foreignPattendconference = $foreignPattendconference
                 ->where('name', "like", "%$request->name%");
-        if ($request->profLevel != "")
+        }
+
+        if ($request->profLevel != "") {
             $foreignPattendconference = $foreignPattendconference
                 ->where('profLevel', $request->profLevel);
-        if ($request->nation != "")
+        }
+
+        if ($request->nation != "") {
             $foreignPattendconference = $foreignPattendconference
                 ->where('nation', "like", "%$request->nation%");
-        if ($request->confName != "")
+        }
+
+        if ($request->confName != "") {
             $foreignPattendconference = $foreignPattendconference
                 ->where('confName', "like", "%$request->confName%");
-        if ($request->publishedPaperName != "")
+        }
+
+        if ($request->publishedPaperName != "") {
             $foreignPattendconference = $foreignPattendconference
                 ->where('publishedPaperName', "like", "%$request->publishedPaperName%");
-        if ($request->comments != "")
+        }
+
+        if ($request->comments != "") {
             $foreignPattendconference = $foreignPattendconference
                 ->where('comments', "like", "%$request->comments%");
-        if ($request->startDate != "")
+        }
+
+        if ($request->startDate != "") {
             $foreignPattendconference = $foreignPattendconference
                 ->where('startDate', '>=', "$request->startDate");
-        if ($request->endDate != "")
+        }
+
+        if ($request->endDate != "") {
             $foreignPattendconference = $foreignPattendconference
                 ->where('endDate', '<=', "$request->endDate");
+        }
 
         if ($user->permission == 2) {
             $foreignPattendconference = $foreignPattendconference->where('foreign_prof_attend_conference.college', $user->college);
-        }else if ($user->permission == 3) {
+        } else if ($user->permission == 3) {
             $foreignPattendconference = $foreignPattendconference->where('foreign_prof_attend_conference.college', $user->college)
                 ->where('foreign_prof_attend_conference.dept', $user->dept);
         }
@@ -134,35 +159,38 @@ class ForeignProfAttendConferenceController extends Controller
 
     public function edit($id) {
         $foreignPattendconference = ForeignProfAttendConference::find($id);
-        if (Gate::allows('permission', $foreignPattendconference))
+        if (Gate::allows('permission', $foreignPattendconference)) {
             return view('prof/foreign_prof_attend_conference_edit', $foreignPattendconference);
+        }
+
         return redirect('foreign_prof_attend_conference');
     }
 
     public function update($id, Request $request) {
         $foreignPattendconference = ForeignProfAttendConference::find($id);
-        if (!Gate::allows('permission', $foreignPattendconference))
+        if (!Gate::allows('permission', $foreignPattendconference)) {
             return redirect('foreign_prof_attend_conference');
+        }
 
         $rules = [
-            'college' => 'required|max:11',
-            'dept' => 'required|max:11',
-            'name' => 'required|max:20',
-            'profLevel' => 'required|max:11',
-            'nation' => 'required|max:20',
-            'confName' => 'required|max:200',
+            'college'            => 'required|max:11',
+            'dept'               => 'required|max:11',
+            'name'               => 'required|max:20',
+            'profLevel'          => 'required|max:11',
+            'nation'             => 'required|max:20',
+            'confName'           => 'required|max:200',
             'publishedPaperName' => 'required|max:100',
-            'startDate' => 'required',
-            'endDate' => 'required',
-            'comments' => 'max:500',
+            'startDate'          => 'required',
+            'endDate'            => 'required',
+            'comments'           => 'max:500',
         ];
 
         $message = [
             'required' => '必須填寫:attribute欄位',
-            'max' => ':attribute欄位的輸入長度不能大於:max',
+            'max'      => ':attribute欄位的輸入長度不能大於:max',
         ];
 
-        $validator=Validator::make($request->all(), $rules, $message);
+        $validator = Validator::make($request->all(), $rules, $message);
 
         if ($request->startDate > $request->endDate) {
             $validator->errors()->add('endDate', '開始時間必須在結束時間前');
@@ -179,38 +207,40 @@ class ForeignProfAttendConferenceController extends Controller
 
     public function delete($id) {
         $foreignPattendconference = ForeignProfAttendConference::find($id);
-        if (!Gate::allows('permission', $foreignPattendconference))
+        if (!Gate::allows('permission', $foreignPattendconference)) {
             return redirect('foreign_prof_attend_conference');
+        }
+
         $foreignPattendconference->delete();
         return redirect('foreign_prof_attend_conference');
     }
 
-
     public function upload(Request $request) {
-        Excel::load($request->file('file'), function($reader) {
-            $array = $reader->toArray();
+        Excel::load($request->file('file'), function ($reader) {
+            $array    = $reader->toArray();
             $newArray = [];
             foreach ($array as $arrayKey => $item) {
-                if ($this->isAllNull($item))
+                if ($this->isAllNull($item)) {
                     continue;
+                }
 
                 $errorLine = $arrayKey + 2;
-                $rules = [
-                    '一級邀請單位' => 'required|max:11',
-                    '二級邀請單位' => 'required|max:11',
-                    '境外學者姓名' => 'required|max:20',
+                $rules     = [
+                    '一級邀請單位'                 => 'required|max:11',
+                    '二級邀請單位'                 => 'required|max:11',
+                    '境外學者姓名'                 => 'required|max:20',
                     '境外學者身分教授副教授助理教授或博士後研究員' => 'required|max:11',
-                    '國籍' => 'required|max:20',
-                    '會議名稱' => 'required|max:200',
-                    '發表論文名稱' => 'required|max:100',
-                    '開始時間' => 'required|date',
-                    '結束時間' => 'required|date',
-                    '備註' => 'max:500',
+                    '國籍'                     => 'required|max:20',
+                    '會議名稱'                   => 'required|max:200',
+                    '發表論文名稱'                 => 'required|max:100',
+                    '開始時間'                   => 'required|date',
+                    '結束時間'                   => 'required|date',
+                    '備註'                     => 'max:500',
                 ];
                 $message = [
                     'required' => "必須填寫 :attribute 欄位, 第 $errorLine 行",
-                    'max' => ':attribute 欄位的輸入長度不能大於:max'.", 第 $errorLine 行",
-                    'date' => ':attribute 欄位時間格式錯誤, 應為 xxxx/xx/xx'.", 第 $errorLine 行"
+                    'max'      => ':attribute 欄位的輸入長度不能大於:max' . ", 第 $errorLine 行",
+                    'date'     => ':attribute 欄位時間格式錯誤, 應為 xxxx/xx/xx' . ", 第 $errorLine 行",
                 ];
                 $validator = Validator::make($item, $rules, $message);
 
@@ -229,7 +259,7 @@ class ForeignProfAttendConferenceController extends Controller
                             unset($item[$key]);
                             break;
                         case '境外學者身分教授副教授助理教授或博士後研究員':
-                            switch($value) {
+                            switch ($value) {
                                 case "教授":
                                     $value = 1;
                                     break;
@@ -280,14 +310,14 @@ class ForeignProfAttendConferenceController extends Controller
                 }
 
                 if ($item['startDate'] > $item['endDate']) {
-                    $validator->errors()->add('date', '開始時間必須在結束時間前'.", 第 $errorLine 行");
+                    $validator->errors()->add('date', '開始時間必須在結束時間前' . ", 第 $errorLine 行");
                 }
                 if (CollegeData::where('college', $item['college'])
-                        ->where('dept', $item['dept'])->first()==null) {
-                    $validator->errors()->add('number', '單位代碼錯誤'.", 第 $errorLine 行");
+                    ->where('dept', $item['dept'])->first() == null) {
+                    $validator->errors()->add('number', '單位代碼錯誤' . ", 第 $errorLine 行");
                 }
-                if (!Gate::allows('permission', (object)$item)) {
-                    $validator->errors()->add('permission', '無法新增未有權限之單位'.", 第 $errorLine 行");
+                if (!Gate::allows('permission', (object) $item)) {
+                    $validator->errors()->add('permission', '無法新增未有權限之單位' . ", 第 $errorLine 行");
                 }
                 if (count($validator->errors()) > 0) {
                     return redirect('foreign_prof_attend_conference')->withErrors($validator, "upload");
@@ -300,13 +330,80 @@ class ForeignProfAttendConferenceController extends Controller
     }
 
     public function example(Request $request) {
-        return response()->download(public_path().'/Excel_example/prof/foreign_prof_attend_conference.xlsx', "境外學者來校出席國際會議.xlsx");
+        return response()->download(public_path() . '/Excel_example/prof/foreign_prof_attend_conference.xlsx', "境外學者來校出席國際會議.xlsx");
+    }
+
+    public function download(Request $request) {
+        $sortBy  = 'id';
+        $orderBy = "desc";
+        $user    = Auth::user();
+
+        if ($request->sortBy != null) {
+            $sortBy = $request->sortBy;
+        }
+
+        if ($request->orderBy != null) {
+            $orderBy = $request->orderBy;
+        }
+
+        $foreignPattendconference = ForeignProfAttendConference::join('college_data', function ($join) {
+            $join->on('foreign_prof_attend_conference.college', 'college_data.college');
+            $join->on('foreign_prof_attend_conference.dept', 'college_data.dept');
+        });
+
+        if ($user->permission == 2) {
+            $foreignPattendconference = $foreignPattendconference->where('foreign_prof_attend_conference.college', $user->college);
+        } else if ($user->permission == 3) {
+            $foreignPattendconference = $foreignPattendconference->where('foreign_prof_attend_conference.college', $user->college)
+                ->where('foreign_prof_attend_conference.dept', $user->dept);
+        }
+
+        $foreignPattendconference         = $foreignPattendconference->orderBy($sortBy, $orderBy)->get()->toArray();
+        $foreignPattendconference_array[] = array(/*'索引值',*/ '一級單位', '系所部門', '姓名', '身份', '國籍', '會議名稱', '發表論文名稱', '開始時間', '結束時間', '備註');
+        // dd($foreignPattendconference);
+        foreach ($foreignPattendconference as $foreignPattendconference_data) {
+            $profLevel = $foreignPattendconference_data['profLevel'];
+            if ($profLevel == 1) $profLevel = '教授';
+            else if ($profLevel == 2) $profLevel = '副教授';
+            else if ($profLevel == 3) $profLevel = '助理教授';
+            else if ($profLevel == 4) $profLevel = '博士後研究員';
+            else if ($profLevel == 5) $profLevel = '研究生';
+
+            $foreignPattendconference_array[] = array(
+                // 'id'                 => $foreignPattendconference_data['id'],
+                'chtCollege'         => $foreignPattendconference_data['chtCollege'],
+                'chtDept'            => $foreignPattendconference_data['chtDept'],
+                'name'               => $foreignPattendconference_data['name'],
+                'profLevel'          => $profLevel,
+                'nation'             => $foreignPattendconference_data['nation'],
+                'confName'           => $foreignPattendconference_data['confName'],
+                'publishedPaperName' => $foreignPattendconference_data['publishedPaperName'],
+                'startDate'          => $foreignPattendconference_data['startDate'],
+                'endDate'            => $foreignPattendconference_data['endDate'],
+                'comments'           => $foreignPattendconference_data['comments'],
+            );
+        }
+
+        Excel::create('境外學者來校出席國際會議', function ($excel) use ($foreignPattendconference_array) {
+            $excel->setTitle('境外學者來校出席國際會議');
+            $excel->sheet('表單', function ($sheet) use ($foreignPattendconference_array) {
+                // fromArray(5) parameter:
+                //   - source               要輸出的array
+                //   - nullValue            array資料內null的呈現方式，預設null
+                //   - startCell            資料起始位置，預設A1
+                //   - strictNullComparison 預設情況下0會視為空白，若要顯示0則需改成false，預設true
+                //   - headingGeneration    表頭是否自動產生。預設為true
+                // dd($foreignPattendconference_array);
+                $sheet->fromArray($foreignPattendconference_array, null, 'A1', false, false);
+            });
+        })->download('xlsx');
     }
 
     private function isAllNull($array) {
-        foreach($array as $item) {
-            if ($item != null)
+        foreach ($array as $item) {
+            if ($item != null) {
                 return false;
+            }
         }
         return true;
     }

@@ -2,7 +2,7 @@
 @section('content')
 <div class="row">
 	<div class="col-md-12">
-		<h1 class="page-header">外籍學生至本校短期交流訪問資料修改</h1>
+		<h1 class="page-header">境外學生至本校短期交流訪問資料修改</h1>
 	</div>
 </div>
 <div class="row">

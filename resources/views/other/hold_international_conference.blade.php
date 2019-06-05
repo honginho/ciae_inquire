@@ -13,96 +13,77 @@
 		<div class="panel panel-default">
 			<div class="panel-body">
 				<ul class="nav nav-tabs">
-	                @if(count($errors)>0)
-		                <li><a href="#show" data-toggle="tab">檢視</a>
-		                </li>
-		                <li class="active"><a href="#insert" data-toggle="tab">新增</a>
-		                </li>
-		                <li><a href="#search" data-toggle="tab">進階搜尋</a>
-		                </li>
-		                <li><a href="#upload" data-toggle="tab">批次上傳</a>
-		                </li>
+					@if(count($errors)>0)
+						<li><a href="#show" data-toggle="tab">檢視</a></li>
+						<li class="active"><a href="#insert" data-toggle="tab">新增</a></li>
+						<li><a href="#search" data-toggle="tab">進階搜尋</a></li>
+						<li><a href="#upload" data-toggle="tab">批次上傳</a></li>
+						<li><a href="#download" data-toggle="tab">資料下載</a></li>
 					@elseif(count($errors->upload)>0)
-		                <li><a href="#show" data-toggle="tab">檢視</a>
-		                </li>
-		                <li><a href="#insert" data-toggle="tab">新增</a>
-		                </li>
-		                <li><a href="#search" data-toggle="tab">進階搜尋</a>
-		                </li>
-		                <li class="active"><a href="#upload" data-toggle="tab">批次上傳</a>
-		                </li>
-		            @else
-		           		<li class="active"><a href="#show" data-toggle="tab">檢視</a>
-		                </li>
-		                <li><a href="#insert" data-toggle="tab">新增</a>
-		                </li>
-		                <li><a href="#search" data-toggle="tab">進階搜尋</a>
-		                </li>
-		                <li><a href="#upload" data-toggle="tab">批次上傳</a>
-		                </li>
-		            @endif
-	            </ul>
-            	<div class="tab-content">
+						<li><a href="#show" data-toggle="tab">檢視</a></li>
+						<li><a href="#insert" data-toggle="tab">新增</a></li>
+						<li><a href="#search" data-toggle="tab">進階搜尋</a></li>
+						<li class="active"><a href="#upload" data-toggle="tab">批次上傳</a></li>
+						<li><a href="#download" data-toggle="tab">資料下載</a></li>
+					@else
+						<li class="active"><a href="#show" data-toggle="tab">檢視</a></li>
+						<li><a href="#insert" data-toggle="tab">新增</a></li>
+						<li><a href="#search" data-toggle="tab">進階搜尋</a></li>
+						<li><a href="#upload" data-toggle="tab">批次上傳</a></li>
+						<li><a href="#download" data-toggle="tab">資料下載</a></li>
+					@endif
+				</ul>
+				<div class="tab-content">
 					@if(count($errors)>0||count($errors->upload)>0)
 						<div class="tab-pane fade in table-responsive" id="show" style="margin-top: 10px">
 					@else
 						<div class="tab-pane fade in active table-responsive" id="show" style="margin-top: 10px">
 					@endif
 						@if(session('success'))
-				        <div class="alert alert-success alert-dismissible" role="alert">
-				            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-				                <span aria-hidden="true">&times;</span>
-				            </button>
-				            <strong> {{ session('success') }}</strong>
-				        </div>
-			        	@endif
+						<div class="alert alert-success alert-dismissible" role="alert">
+							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+							<strong> {{ session('success') }}</strong>
+						</div>
+						@endif
 						<table width="100%" class="table table-striped table-bordered table-hover">
 							<thead>
 								<tr>
-									<td id="academicYear" class="text-nowrap"
-										onclick="sort(id)">學年度
+									<td id="academicYear" class="text-nowrap" onclick="sort(id)">學年度
 										<i class="fa fa-sort" aria-hidden="true"></i>
 									</td>
-									<td id="hold_international_conference.college" class="text-nowrap"
-										onclick="sort(id)">一級單位
+									<td id="hold_international_conference.college" class="text-nowrap" onclick="sort(id)">一級單位
 										<i class="fa fa-sort" aria-hidden="true"></i>
 									</td>
-									<td id="hold_international_conference.dept" class="text-nowrap"
-										onclick="sort(id)">系所部門
+									<td id="hold_international_conference.dept" class="text-nowrap" onclick="sort(id)">系所部門
 										<i class="fa fa-sort" aria-hidden="true"></i>
 									</td>
-									<td id="holdWayId" class="text-nowrap"
-										onclick="sort(id)">舉辦方式代碼
+									<td id="holdWayId" class="text-nowrap" onclick="sort(id)">舉辦方式代碼
 										<i class="fa fa-sort" aria-hidden="true"></i>
 									</td>
-									<td id="holdWay" class="text-nowrap"
-										onclick="sort(id)">舉辦方式
+									<td id="holdWay" class="text-nowrap" onclick="sort(id)">舉辦方式
 										<i class="fa fa-sort" aria-hidden="true"></i>
 									</td>
-									<td id="confName" class="text-nowrap"
-										onclick="sort(id)">會議名稱
+									<td id="confName" class="text-nowrap" onclick="sort(id)">會議名稱
 										<i class="fa fa-sort" aria-hidden="true"></i>
 									</td>
-									<td id="confHoldNationId" class="text-nowrap"
-										onclick="sort(id)">會議舉行國家/地區代碼
+									<td id="confHoldNationId" class="text-nowrap" onclick="sort(id)">會議舉行國家/地區代碼
 										<i class="fa fa-sort" aria-hidden="true"></i>
 									</td>
-									<td id="startDate" class="text-nowrap"
-										onclick="sort(id)">開始時間
+									<td id="startDate" class="text-nowrap" onclick="sort(id)">開始時間
 										<i class="fa fa-sort" aria-hidden="true"></i>
 									</td>
-									<td id="endDate" class="text-nowrap"
-										onclick="sort(id)">結束時間
+									<td id="endDate" class="text-nowrap" onclick="sort(id)">結束時間
 										<i class="fa fa-sort" aria-hidden="true"></i>
 									</td>
-									<td id="comments" class="text-nowrap"
-										onclick="sort(id)">備註
+									<td id="comments" class="text-nowrap" onclick="sort(id)">備註
 										<i class="fa fa-sort" aria-hidden="true"></i>
 									</td>
 									<td class="text-nowrap">管理</td>
 								</tr>
-								</thead>
-								<tbody>
+							</thead>
+							<tbody>
 								@foreach ($holdinternationalconference as $data)
 								<tr>
 									<td class='text-nowrap'>{{ $data->academicYear }}</td>
@@ -119,10 +100,12 @@
 										@can('permission',$data)
 										<a href="{{ url('hold_international_conference', $data->id) }}"
 											class="glyphicon glyphicon-pencil btn btn-success btn-xs"></a>
-										<form action="{{ url('hold_international_conference', $data->id) }}" method="post" style="display: inline;">
+										<form action="{{ url('hold_international_conference', $data->id) }}" method="post"
+											style="display: inline;">
 											{{ method_field('DELETE') }}
-                        					{{ csrf_field() }}
-											<button class="glyphicon glyphicon-trash btn btn-danger btn-xs" onclick="clickDel(event)"></button>
+											{{ csrf_field() }}
+											<button class="glyphicon glyphicon-trash btn btn-danger btn-xs"
+												onclick="clickDel(event)"></button>
 										</form>
 										@endcan
 									</td>
@@ -211,11 +194,11 @@
 
 					<div class="tab-pane fade in col-md-12" id="search" style="margin-top: 10px;">
 						<div class="alert alert-success alert-dismissible" role="alert">
-				            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-				                <span aria-hidden="true">&times;</span>
-				            </button>
-				            <strong>不加入搜尋條件之選項留空即可</strong>
-				        </div>
+							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+							<strong>不加入搜尋條件之選項留空即可</strong>
+						</div>
 						<form action="{{ url('hold_international_conference/search') }}">
 							<div class="form-group">
 								<label for="academicYear">學年度</label>
@@ -264,9 +247,9 @@
 					@endif
 						<form action="{{ url('hold_international_conference/upload') }}" method="post" enctype="multipart/form-data">
 							{{ csrf_field() }}
-                        	<div id="file_error"></div>
-                        	@if(count($errors->upload)>0)
-                        		<div class="alert alert-danger alert-dismissible" role="alert">
+							<div id="file_error"></div>
+							@if(count($errors->upload)>0)
+								<div class="alert alert-danger alert-dismissible" role="alert">
 									<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 										<span aria-hidden="true">&times;</span>
 									</button>
@@ -276,7 +259,7 @@
 										@endforeach
 									</strong>
 								</div>
-                        	@endif
+							@endif
 							<input type="file" name="file" id="file" style="margin: 2px">
 							<button class="btn btn-primary" style="margin: 2px"
 								onclick="checkFile(event)">上傳</button>
@@ -295,6 +278,10 @@
 								<li>其餘欄位若有限制請參照該欄位括弧中選項填入</li>
 							</ul>
 						</div>
+					</div>
+
+					<div class="tab-pane fade in col-md-12" id="download" style="margin-top: 10px;">
+						<a class="btn btn-success" href="{{url('hold_international_conference/download')}}">下載所有資料</a>
 					</div>
 				</div>
 			</div>

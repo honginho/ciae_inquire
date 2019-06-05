@@ -36,7 +36,7 @@
                         @endif
 						<div class="form-group">
 							<label for="nation">前往國家</label>
-							<textarea name="nation" id="nation" cols="30" rows="3" class="form-control">{{$nation}}</textarea>
+							<input type="text" class="form-control" name="nation" value="{{$nation}}">
 						</div>
 						
 						@if($errors->has('startDate')||$errors->has('endDate'))

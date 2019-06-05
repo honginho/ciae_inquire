@@ -9,134 +9,111 @@
 	</div>
 </div>
 <div class="row">
-	<div class="col-md-12">	
+	<div class="col-md-12">
 		<div class="panel panel-default">
 			<div class="panel-body">
-			<ul class="nav nav-tabs">
-                @if(count($errors)>0)
-	                <li><a href="#show" data-toggle="tab">檢視</a>
-	                </li>
-	                <li class="active"><a href="#insert" data-toggle="tab">新增</a>
-	                </li>
-	                <li><a href="#search" data-toggle="tab">進階搜尋</a>
-	                </li>
-	                <li><a href="#upload" data-toggle="tab">批次上傳</a>
-	                </li>
-				@elseif(count($errors->upload)>0)
-	                <li><a href="#show" data-toggle="tab">檢視</a>
-	                </li>
-	                <li><a href="#insert" data-toggle="tab">新增</a>
-	                </li>
-	                <li><a href="#search" data-toggle="tab">進階搜尋</a>
-	                </li>
-	                <li class="active"><a href="#upload" data-toggle="tab">批次上傳</a>
-	                </li>
-	            @else
-	           		<li class="active"><a href="#show" data-toggle="tab">檢視</a>
-	                </li>
-	                <li><a href="#insert" data-toggle="tab">新增</a>
-	                </li>
-	                <li><a href="#search" data-toggle="tab">進階搜尋</a>
-	                </li>
-	                <li><a href="#upload" data-toggle="tab">批次上傳</a>
-	                </li>
-	            @endif
-            </ul>
-            	<div class="tab-content">
-					@if(count($errors)>0||count($errors->upload)>0)
-						<div class="tab-pane fade in table-responsive" id="show" 
-							style="margin-top: 10px">
+				<ul class="nav nav-tabs">
+					@if(count($errors)>0)
+						<li><a href="#show" data-toggle="tab">檢視</a></li>
+						<li class="active"><a href="#insert" data-toggle="tab">新增</a></li>
+						<li><a href="#search" data-toggle="tab">進階搜尋</a></li>
+						<li><a href="#upload" data-toggle="tab">批次上傳</a></li>
+						<li><a href="#download" data-toggle="tab">資料下載</a></li>
+					@elseif(count($errors->upload)>0)
+						<li><a href="#show" data-toggle="tab">檢視</a></li>
+						<li><a href="#insert" data-toggle="tab">新增</a></li>
+						<li><a href="#search" data-toggle="tab">進階搜尋</a></li>
+						<li class="active"><a href="#upload" data-toggle="tab">批次上傳</a></li>
+						<li><a href="#download" data-toggle="tab">資料下載</a></li>
 					@else
-						<div class="tab-pane fade in active table-responsive " id="show" 
-							style="margin-top: 10px">
+						<li class="active"><a href="#show" data-toggle="tab">檢視</a></li>
+						<li><a href="#insert" data-toggle="tab">新增</a></li>
+						<li><a href="#search" data-toggle="tab">進階搜尋</a></li>
+						<li><a href="#upload" data-toggle="tab">批次上傳</a></li>
+						<li><a href="#download" data-toggle="tab">資料下載</a></li>
+					@endif
+				</ul>
+				<div class="tab-content">
+					@if(count($errors)>0||count($errors->upload)>0)
+						<div class="tab-pane fade in table-responsive" id="show" style="margin-top: 10px">
+					@else
+						<div class="tab-pane fade in active table-responsive " id="show" style="margin-top: 10px">
 					@endif
 						@if(session('success'))
-				        <div class="alert alert-success alert-dismissible" role="alert">
-				            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-				                <span aria-hidden="true">&times;</span>
-				            </button>
-				            <strong> {{ session('success') }}</strong>
-				        </div>
-			       		@endif	
-		      	 	<table width="100%" class="table table-striped table-bordered table-hover">
-							<thead>	
+						<div class="alert alert-success alert-dismissible" role="alert">
+							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+							<strong> {{ session('success') }}</strong>
+						</div>
+						@endif
+						<table width="100%" class="table table-striped table-bordered table-hover">
+							<thead>
 								<tr>
-									<td class="text-nowrap" id="attend_international_organization.college" 
-										onclick="sort(id)">一級單位
+									<td class="text-nowrap" id="attend_international_organization.college" onclick="sort(id)">一級單位
 										<i class="fa fa-sort" aria-hidden="true"></i>
 									</td>
-									<td class="text-nowrap" id="attend_international_organization.dept" 
-										onclick="sort(id)">系所部門
+									<td class="text-nowrap" id="attend_international_organization.dept" onclick="sort(id)">系所部門
 										<i class="fa fa-sort" aria-hidden="true"></i>
 									</td>
-									<td class="text-nowrap" id="name" 
-										onclick="sort(id)">參加人
+									<td class="text-nowrap" id="name" onclick="sort(id)">參加人
 										<i class="fa fa-sort" aria-hidden="true"></i>
 									</td>
-									<td class="text-nowrap" id="organization" 
-										onclick="sort(id)">組織名稱
+									<td class="text-nowrap" id="organization" onclick="sort(id)">組織名稱
 										<i class="fa fa-sort" aria-hidden="true"></i>
 									</td>
-									<td class="text-nowrap" id="startDate" 
-										onclick="sort(id)">開始時間
+									<td class="text-nowrap" id="startDate" onclick="sort(id)">開始時間
 										<i class="fa fa-sort" aria-hidden="true"></i>
 									</td>
-									<td class="text-nowrap" id="endDate" 
-										onclick="sort(id)">結束時間
+									<td class="text-nowrap" id="endDate" onclick="sort(id)">結束時間
 										<i class="fa fa-sort" aria-hidden="true"></i>
 									</td>
-									<td class="text-nowrap" id="comments" 
-										onclick="sort(id)">備註
+									<td class="text-nowrap" id="comments" onclick="sort(id)">備註
 										<i class="fa fa-sort" aria-hidden="true"></i>
 									</td>
 									<td class="text-nowrap">管理</td>
 								</tr>
-								</thead>
-								<tbody>
-									@foreach ($attendiorganization as $data)
-										<tr>
-											<td>{{$data->chtCollege}}</td>
-											<td>{{$data->chtDept}}</td>
-											<td>{{$data->name}}</td>										
-											<td>{{$data->organization}}</td>
-											<td class="text-nowrap">{{$data->startDate}}</td>
-											<td class="text-nowrap">{{$data->endDate}}</td>
-											<td>{{$data->comments}}</td>
-											<td class="text-nowrap">
-												@can('permission',$data)
-												<a href="{{url('attend_international_organization',$data->id)}}"
-													class="glyphicon glyphicon-pencil	
-													btn btn-success btn-xs"></a>
-												<form action="{{url('attend_international_organization',$data->id)}}"
-													method="post" style="display: inline;">
-													{{ method_field('DELETE') }}
-		                        					{{ csrf_field() }}
-													<button class="glyphicon glyphicon-trash
-														btn btn-danger btn-xs" 
-														onclick="clickDel(event)"></button>
-												</form>
-												@endcan
-											</td>
-										</tr>
-									@endforeach
-								</tbody>
+							</thead>
+							<tbody>
+								@foreach ($attendiorganization as $data)
+								<tr>
+									<td>{{$data->chtCollege}}</td>
+									<td>{{$data->chtDept}}</td>
+									<td>{{$data->name}}</td>
+									<td>{{$data->organization}}</td>
+									<td class="text-nowrap">{{$data->startDate}}</td>
+									<td class="text-nowrap">{{$data->endDate}}</td>
+									<td>{{$data->comments}}</td>
+									<td class="text-nowrap">
+										@can('permission',$data)
+										<a href="{{url('attend_international_organization',$data->id)}}" class="glyphicon glyphicon-pencil btn btn-success btn-xs"></a>
+										<form action="{{url('attend_international_organization',$data->id)}}" method="post"
+											style="display: inline;">
+											{{ method_field('DELETE') }}
+											{{ csrf_field() }}
+											<button class="glyphicon glyphicon-trash
+														btn btn-danger btn-xs" onclick="clickDel(event)"></button>
+										</form>
+										@endcan
+									</td>
+								</tr>
+								@endforeach
+							</tbody>
 						</table>
-
+						{{ $attendiorganization->links() }}
 					</div>
 
 					<!--insert page-->
 
 					@if(count($errors)>0)
-						<div class="tab-pane fade in col-md-12 active " id="insert" 
-							style="margin-top: 10px">
+						<div class="tab-pane fade in col-md-12 active " id="insert" style="margin-top: 10px">
 					@else
-						<div class="tab-pane fade in col-md-12 " id="insert" 
-							style="margin-top: 10px">
+						<div class="tab-pane fade in col-md-12 " id="insert" style="margin-top: 10px">
 					@endif
 						<form action="{{url('attend_international_organization')}}" method="post">
 							{{ csrf_field() }}
 							@include('../layouts/select')
-							
+
 							@if($errors->has('name'))
                                 <p class="text-danger">{{$errors->first('name')}}</p>
                             @endif
@@ -144,7 +121,7 @@
 								<label for="">參加人</label>
 								<input type="text" class="form-control" name="name" value="{{old('name')}}" />
 							</div>
-							
+
 							@if($errors->has('organization'))
                                 <p class="text-danger">{{$errors->first('organization')}}</p>
                             @endif
@@ -154,7 +131,7 @@
 							</div>
 
 							@if($errors->has('startDate')||$errors->has('endDate'))
-                                <p class="text-danger col-md-6">{{ $errors->first('startDate')}}</p>                      
+                                <p class="text-danger col-md-6">{{ $errors->first('startDate')}}</p>
                                 <p class="text-danger col-md-6">{{ $errors->first('endDate')}}</p>
                             @endif
 							<div class="form-group col-md-6" style="padding-left:0 ;padding-right: 0">
@@ -165,7 +142,7 @@
 								<label for="endDate">結束時間</label>
 								<input type="text" name="endDate" class="form-control" value="{{old('endDate')}}" id="insert_endDate">
 							</div>
-							
+
 							@if($errors->has('comments'))
                                 <p class="text-danger">{{$errors->first('comments')}}</p>
                             @endif
@@ -179,11 +156,11 @@
 
 					<div class="tab-pane fade in col-md-12" id="search" style="margin-top: 10px;">
 						<div class="alert alert-success alert-dismissible" role="alert">
-				            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-				                <span aria-hidden="true">&times;</span>
-				            </button>
-				            <strong>不加入搜尋條件之選項留空即可</strong>
-				        </div>
+							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+							<strong>不加入搜尋條件之選項留空即可</strong>
+						</div>
 						<form action="{{url('attend_international_organization/search')}}">
 							@include('../layouts/select_search')
 							<div class="form-group">
@@ -216,11 +193,10 @@
 					@else
 						<div class="tab-pane fade in col-md-12" id="upload" style="margin-top: 10px;">
 					@endif
-						<form action="{{url('attend_international_organization/upload')}}" method="post" enctype="multipart/form-data">			
-						{{ csrf_field() }}
-                        	<div id="file_error"></div>
-                        	
-                        	@if(count($errors->upload)>0)
+						<form action="{{url('attend_international_organization/upload')}}" method="post" enctype="multipart/form-data">
+							{{ csrf_field() }}
+							<div id="file_error"></div>
+							@if(count($errors->upload)>0)
 								<div class="alert alert-danger alert-dismissible" role="alert">
 									<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 										<span aria-hidden="true">&times;</span>
@@ -231,12 +207,12 @@
 										@endforeach
 									</strong>
 								</div>
-                        	@endif                               	
+							@endif
 							<input type="file" name="file" id="file" style="margin: 2px">
-							<button class="btn btn-primary" style="margin: 2px" 
+							<button class="btn btn-primary" style="margin: 2px"
 								onclick="checkFile(event)">上傳</button>
 							<a class="btn btn-success" href="{{url('attend_international_organization/example')}}">範例檔案</a>
-							<a class="btn btn-success" href="{{url('example')}}">系所對照表</a>										
+							<a class="btn btn-success" href="{{url('example')}}">系所對照表</a>
 						</form>
 
 						<div class="alert alert-warning" style="margin-top:10px">
@@ -245,12 +221,15 @@
 							</button>
 							<strong>上傳注意事項</strong>
 							<ul>
-								<li>請下載範例檔案填寫</li>	
+								<li>請下載範例檔案填寫</li>
 								<li>請將系所欄位依照系所對照表之代號填入</li>
 								<li>其餘欄位若有限制請參照該欄位括弧中選項填入</li>
 							</ul>
 						</div>
+					</div>
 
+					<div class="tab-pane fade in col-md-12" id="download" style="margin-top: 10px;">
+						<a class="btn btn-success" href="{{url('attend_international_organization/download')}}">下載所有資料</a>
 					</div>
 				</div>
             </div>

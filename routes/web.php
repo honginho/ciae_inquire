@@ -17,7 +17,7 @@ Route::post('/login', 'Auth\LoginController@login');
 Route::post('/logout', 'Auth\LoginController@logout');
 
 
-Route::group(['middleware' => 'auth'], function(){
+Route::group(['middleware' => 'auth'], function () {
 	Route::get('/home', 'HomeController@index');
 
 	// 基本資料 - - - - - - - - - - - - - - - - - - -
@@ -62,6 +62,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('/prof_attend_conference', 'prof\ProfAttendConferenceController@index');
 	Route::get('/prof_attend_conference/search', 'prof\ProfAttendConferenceController@search');
 	Route::get('/prof_attend_conference/example', 'prof\ProfAttendConferenceController@example');
+	Route::get('/prof_attend_conference/download', 'prof\ProfAttendConferenceController@download');
 	Route::post('/prof_attend_conference', 'prof\ProfAttendConferenceController@insert');
 	Route::post('/prof_attend_conference/upload', 'prof\ProfAttendConferenceController@upload');
 	Route::get('/prof_attend_conference/{id}', 'prof\ProfAttendConferenceController@edit');
@@ -72,16 +73,18 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('/prof_exchange', 'prof\ProfExchangeController@index');
 	Route::get('/prof_exchange/search', 'prof\ProfExchangeController@search');
 	Route::get('/prof_exchange/example', 'prof\ProfExchangeController@example');
+	Route::get('/prof_exchange/download', 'prof\ProfExchangeController@download');
 	Route::post('/prof_exchange', 'prof\ProfExchangeController@insert');
 	Route::post('/prof_exchange/upload', 'prof\ProfExchangeController@upload');
 	Route::get('/prof_exchange/{id}', 'prof\ProfExchangeController@edit');
 	Route::patch('/prof_exchange/{id}', 'prof\ProfExchangeController@update');
 	Route::delete('/prof_exchange/{id}', 'prof\ProfExchangeController@delete');
 
-		// 本校教師赴國外交換
+		// 本校教師赴國外研究
 	Route::get('/prof_foreign_research', 'prof\ProfForeignResearchController@index');
 	Route::get('/prof_foreign_research/search', 'prof\ProfForeignResearchController@search');
 	Route::get('/prof_foreign_research/example', 'prof\ProfForeignResearchController@example');
+	Route::get('/prof_foreign_research/download', 'prof\ProfForeignResearchController@download');
 	Route::post('/prof_foreign_research', 'prof\ProfForeignResearchController@insert');
 	Route::post('/prof_foreign_research/upload', 'prof\ProfForeignResearchController@upload');
 	Route::get('/prof_foreign_research/{id}', 'prof\ProfForeignResearchController@edit');
@@ -92,6 +95,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('/foreign_prof_vist', 'prof\ForeignProfVistController@index');
 	Route::get('/foreign_prof_vist/search', 'prof\ForeignProfVistController@search');
 	Route::get('/foreign_prof_vist/example', 'prof\ForeignProfVistController@example');
+	Route::get('/foreign_prof_vist/download', 'prof\ForeignProfVistController@download');
 	Route::post('/foreign_prof_vist', 'prof\ForeignProfVistController@insert');
 	Route::post('/foreign_prof_vist/upload', 'prof\ForeignProfVistController@upload');
 	Route::get('/foreign_prof_vist/{id}', 'prof\ForeignProfVistController@edit');
@@ -102,6 +106,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('/foreign_prof_exchange', 'prof\ForeignProfExchangeController@index');
 	Route::get('/foreign_prof_exchange/search', 'prof\ForeignProfExchangeController@search');
 	Route::get('/foreign_prof_exchange/example', 'prof\ForeignProfExchangeController@example');
+	Route::get('/foreign_prof_exchange/download', 'prof\ForeignProfExchangeController@download');
 	Route::post('/foreign_prof_exchange', 'prof\ForeignProfExchangeController@insert');
 	Route::post('/foreign_prof_exchange/upload', 'prof\ForeignProfExchangeController@upload');
 	Route::get('/foreign_prof_exchange/{id}', 'prof\ForeignProfExchangeController@edit');
@@ -112,6 +117,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('/prof_speech_lecture', 'prof\ProfSpeechLectureController@index');
 	Route::get('/prof_speech_lecture/search', 'prof\ProfSpeechLectureController@search');
 	Route::get('/prof_speech_lecture/example', 'prof\ProfSpeechLectureController@example');
+	Route::get('/prof_speech_lecture/download', 'prof\ProfSpeechLectureController@download');
 	Route::post('/prof_speech_lecture', 'prof\ProfSpeechLectureController@insert');
 	Route::post('/prof_speech_lecture/upload', 'prof\ProfSpeechLectureController@upload');
 	Route::get('/prof_speech_lecture/{id}', 'prof\ProfSpeechLectureController@edit');
@@ -122,6 +128,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('/prof_international_academic_cooperation', 'prof\ProfInternationalAcademicCooperationController@index');
 	Route::get('/prof_international_academic_cooperation/search', 'prof\ProfInternationalAcademicCooperationController@search');
 	Route::get('/prof_international_academic_cooperation/example', 'prof\ProfInternationalAcademicCooperationController@example');
+	Route::get('/prof_international_academic_cooperation/download', 'prof\ProfInternationalAcademicCooperationController@download');
 	Route::post('/prof_international_academic_cooperation', 'prof\ProfInternationalAcademicCooperationController@insert');
 	Route::post('/prof_international_academic_cooperation/upload', 'prof\ProfInternationalAcademicCooperationController@upload');
 	Route::get('/prof_international_academic_cooperation/{id}', 'prof\ProfInternationalAcademicCooperationController@edit');
@@ -132,6 +139,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('/foreign_prof_attend_conference', 'prof\ForeignProfAttendConferenceController@index');
 	Route::get('/foreign_prof_attend_conference/search', 'prof\ForeignProfAttendConferenceController@search');
 	Route::get('/foreign_prof_attend_conference/example', 'prof\ForeignProfAttendConferenceController@example');
+	Route::get('/foreign_prof_attend_conference/download', 'prof\ForeignProfAttendConferenceController@download');
 	Route::post('/foreign_prof_attend_conference', 'prof\ForeignProfAttendConferenceController@insert');
 	Route::post('/foreign_prof_attend_conference/upload', 'prof\ForeignProfAttendConferenceController@upload');
 	Route::get('/foreign_prof_attend_conference/{id}', 'prof\ForeignProfAttendConferenceController@edit');
@@ -142,6 +150,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('/foreign_prof_speech_lecture', 'prof\ForeignProfSpeechLectureController@index');
 	Route::get('/foreign_prof_speech_lecture/search', 'prof\ForeignProfSpeechLectureController@search');
 	Route::get('/foreign_prof_speech_lecture/example', 'prof\ForeignProfSpeechLectureController@example');
+	Route::get('/foreign_prof_speech_lecture/download', 'prof\ForeignProfSpeechLectureController@download');
 	Route::post('/foreign_prof_speech_lecture', 'prof\ForeignProfSpeechLectureController@insert');
 	Route::post('/foreign_prof_speech_lecture/upload', 'prof\ForeignProfSpeechLectureController@upload');
 	Route::get('/foreign_prof_speech_lecture/{id}', 'prof\ForeignProfSpeechLectureController@edit');
@@ -152,10 +161,11 @@ Route::group(['middleware' => 'auth'], function(){
 
 	// 學生專區 - - - - - - - - - - - - - - - - - - -
 
-		// 赴國外出席國際會議
+		// 本校學生赴國外出席國際會議
 	Route::get('/stu_attend_conf', 'stu\StuAttendConfController@index');
 	Route::get('/stu_attend_conf/search', 'stu\StuAttendConfController@search');
 	Route::get('/stu_attend_conf/example', 'stu\StuAttendConfController@example');
+	Route::get('/stu_attend_conf/download', 'stu\StuAttendConfController@download');
 	Route::post('/stu_attend_conf', 'stu\StuAttendConfController@insert');
 	Route::post('/stu_attend_conf/upload', 'stu\StuAttendConfController@upload');
 	Route::get('/stu_attend_conf/{id}', 'stu\StuAttendConfController@edit');
@@ -166,6 +176,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('/stu_to_partner_school', 'stu\StuToPartnerSchoolController@index');
 	Route::get('/stu_to_partner_school/search', 'stu\StuToPartnerSchoolController@search');
 	Route::get('/stu_to_partner_school/example', 'stu\StuToPartnerSchoolController@example');
+	Route::get('/stu_to_partner_school/download', 'stu\StuToPartnerSchoolController@download');
 	Route::post('/stu_to_partner_school', 'stu\StuToPartnerSchoolController@insert');
 	Route::post('/stu_to_partner_school/upload', 'stu\StuToPartnerSchoolController@upload');
 	Route::get('/stu_to_partner_school/{id}', 'stu\StuToPartnerSchoolController@edit');
@@ -176,6 +187,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('/stu_foreign_research', 'stu\StuForeignResearchController@index');
 	Route::get('/stu_foreign_research/search', 'stu\StuForeignResearchController@search');
 	Route::get('/stu_foreign_research/example', 'stu\StuForeignResearchController@example');
+	Route::get('/stu_foreign_research/download', 'stu\StuForeignResearchController@download');
 	Route::post('/stu_foreign_research', 'stu\StuForeignResearchController@insert');
 	Route::post('/stu_foreign_research/upload', 'stu\StuForeignResearchController@upload');
 	Route::get('/stu_foreign_research/{id}', 'stu\StuForeignResearchController@edit');
@@ -186,6 +198,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('/stu_from_partner_school', 'stu\StuFromPartnerSchoolController@index');
 	Route::get('/stu_from_partner_school/search', 'stu\StuFromPartnerSchoolController@search');
 	Route::get('/stu_from_partner_school/example', 'stu\StuFromPartnerSchoolController@example');
+	Route::get('/stu_from_partner_school/download', 'stu\StuFromPartnerSchoolController@download');
 	Route::post('/stu_from_partner_school', 'stu\StuFromPartnerSchoolController@insert');
 	Route::post('/stu_from_partner_school/upload', 'stu\StuFromPartnerSchoolController@upload');
 	Route::get('/stu_from_partner_school/{id}', 'stu\StuFromPartnerSchoolController@edit');
@@ -196,6 +209,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('/short_term_foreign_stu', 'stu\ShortTermForeignStuController@index');
 	Route::get('/short_term_foreign_stu/search', 'stu\ShortTermForeignStuController@search');
 	Route::get('/short_term_foreign_stu/example', 'stu\ShortTermForeignStuController@example');
+	Route::get('/short_term_foreign_stu/download', 'stu\ShortTermForeignStuController@download');
 	Route::post('/short_term_foreign_stu', 'stu\ShortTermForeignStuController@insert');
 	Route::post('/short_term_foreign_stu/upload', 'stu\ShortTermForeignStuController@upload');
 	Route::get('/short_term_foreign_stu/{id}', 'stu\ShortTermForeignStuController@edit');
@@ -206,6 +220,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('/foreign_stu', 'stu\ForeignStuController@index');
 	Route::get('/foreign_stu/search', 'stu\ForeignStuController@search');
 	Route::get('/foreign_stu/example', 'stu\ForeignStuController@example');
+	Route::get('/foreign_stu/download', 'stu\ForeignStuController@download');
 	Route::post('/foreign_stu', 'stu\ForeignStuController@insert');
 	Route::post('/foreign_stu/upload', 'stu\ForeignStuController@upload');
 	Route::get('/foreign_stu/{id}', 'stu\ForeignStuController@edit');
@@ -220,6 +235,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('/transnational_degree', 'other\TransnationalDegreeController@index');
 	Route::get('/transnational_degree/search', 'other\TransnationalDegreeController@search');
 	Route::get('/transnational_degree/example', 'other\TransnationalDegreeController@example');
+	Route::get('/transnational_degree/download', 'other\TransnationalDegreeController@download');
 	Route::post('/transnational_degree', 'other\TransnationalDegreeController@insert');
 	Route::post('/transnational_degree/upload', 'other\TransnationalDegreeController@upload');
 	Route::get('/transnational_degree/{id}', 'other\TransnationalDegreeController@edit');
@@ -230,6 +246,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('/partner_school', 'other\PartnerSchoolController@index');
 	Route::get('/partner_school/search', 'other\PartnerSchoolController@search');
 	Route::get('/partner_school/example', 'other\PartnerSchoolController@example');
+	Route::get('/partner_school/download', 'other\PartnerSchoolController@download');
 	Route::post('/partner_school', 'other\PartnerSchoolController@insert');
 	Route::post('/partner_school/upload', 'other\PartnerSchoolController@upload');
 	Route::get('/partner_school/{id}', 'other\PartnerSchoolController@edit');
@@ -240,6 +257,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('/cooperation_proj', 'other\CooperationProjController@index');
 	Route::get('/cooperation_proj/search', 'other\CooperationProjController@search');
 	Route::get('/cooperation_proj/example', 'other\CooperationProjController@example');
+	Route::get('/cooperation_proj/download', 'other\CooperationProjController@download');
 	Route::post('/cooperation_proj', 'other\CooperationProjController@insert');
 	Route::post('/cooperation_proj/upload', 'other\CooperationProjController@upload');
 	Route::get('/cooperation_proj/{id}', 'other\CooperationProjController@edit');
@@ -250,6 +268,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('internationalize_activity', 'other\InternationalizeActivityController@index');
 	Route::get('/internationalize_activity/search', 'other\InternationalizeActivityController@search');
 	Route::get('/internationalize_activity/example', 'other\InternationalizeActivityController@example');
+	Route::get('/internationalize_activity/download', 'other\InternationalizeActivityController@download');
 	Route::get('/internationalize_activity/{id}', 'other\InternationalizeActivityController@edit');
 	Route::post('internationalize_activity', 'other\InternationalizeActivityController@insert');
 	Route::post('/internationalize_activity/upload', 'other\InternationalizeActivityController@upload');
@@ -260,6 +279,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('international_journal_editor', 'other\InternationalJournalEditorController@index');
 	Route::get('/international_journal_editor/search', 'other\InternationalJournalEditorController@search');
 	Route::get('/international_journal_editor/example', 'other\InternationalJournalEditorController@example');
+	Route::get('/international_journal_editor/download', 'other\InternationalJournalEditorController@download');
 	Route::get('/international_journal_editor/{id}', 'other\InternationalJournalEditorController@edit');
 	Route::post('international_journal_editor', 'other\InternationalJournalEditorController@insert');
 	Route::post('/international_journal_editor/upload', 'other\InternationalJournalEditorController@upload');
@@ -270,6 +290,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('attend_international_organization', 'other\AttendInternationalOrganizationController@index');
 	Route::get('/attend_international_organization/search', 'other\AttendInternationalOrganizationController@search');
 	Route::get('/attend_international_organization/example', 'other\AttendInternationalOrganizationController@example');
+	Route::get('/attend_international_organization/download', 'other\AttendInternationalOrganizationController@download');
 	Route::get('/attend_international_organization/{id}', 'other\AttendInternationalOrganizationController@edit');
 	Route::post('attend_international_organization', 'other\AttendInternationalOrganizationController@insert');
 	Route::post('/attend_international_organization/upload', 'other\AttendInternationalOrganizationController@upload');
@@ -280,6 +301,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('/hold_international_conference', 'other\HoldInternationalConferenceController@index');
 	Route::get('/hold_international_conference/search', 'other\HoldInternationalConferenceController@search');
 	Route::get('/hold_international_conference/example', 'other\HoldInternationalConferenceController@example');
+	Route::get('/hold_international_conference/download', 'other\HoldInternationalConferenceController@download');
 	Route::post('/hold_international_conference', 'other\HoldInternationalConferenceController@insert');
 	Route::post('/hold_international_conference/upload', 'other\HoldInternationalConferenceController@upload');
 	Route::get('/hold_international_conference/{id}', 'other\HoldInternationalConferenceController@edit');
@@ -289,7 +311,7 @@ Route::group(['middleware' => 'auth'], function(){
 
 
 	// 系所對照表下載 - - - - - - - - - - - - - - - - - - -
-	Route::get('/example', function(){
+	Route::get('/example', function () {
         return response()->download(public_path() . '/Excel_example/college_data.xlsx', "系所對照表.xlsx");
 	});
 });

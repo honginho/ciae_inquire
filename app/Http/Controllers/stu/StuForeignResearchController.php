@@ -2,214 +2,237 @@
 
 namespace App\Http\Controllers\stu;
 
-use Illuminate\Http\Request;
+use App\CollegeData;
 use App\Http\Controllers\Controller;
 use App\StuForeignResearch;
+use Excel;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
-use Excel;
 use Validator;
-use App\CollegeData;
-
 
 class StuForeignResearchController extends Controller
 {
-    //
-     public function index (Request $request){
-     	$sortBy = 'id';
+    public function index(Request $request) {
+        $sortBy  = 'id';
         $orderBy = "desc";
-    	$user = Auth::user();
-        
-        if($request->sortBy != null)
+        $user    = Auth::user();
+
+        if ($request->sortBy != null) {
             $sortBy = $request->sortBy;
-        if($request->orderBy != null)
+        }
+
+        if ($request->orderBy != null) {
             $orderBy = $request->orderBy;
+        }
 
-    	$foreignreseach = StuForeignResearch::join('college_data',function($join){
-    		$join->on('stu_foreign_research.college','college_data.college');
-    		$join->on('stu_foreign_research.dept','college_data.dept');
-    		});
+        $foreignreseach = StuForeignResearch::join('college_data', function ($join) {
+            $join->on('stu_foreign_research.college', 'college_data.college');
+            $join->on('stu_foreign_research.dept', 'college_data.dept');
+        });
 
-        if($user->permission == 2){
-            $foreignreseach = $foreignreseach->where('stu_foreign_research.college',$user->college);
-        }else if($user->permission == 3){
-            $foreignreseach = $foreignreseach->where('stu_foreign_research.college',$user->college)
+        if ($user->permission == 2) {
+            $foreignreseach = $foreignreseach->where('stu_foreign_research.college', $user->college);
+        } else if ($user->permission == 3) {
+            $foreignreseach = $foreignreseach->where('stu_foreign_research.college', $user->college)
                 ->where('stu_foreign_research.dept', $user->dept);
         }
 
-        $foreignreseach = $foreignreseach->orderBy($sortBy,$orderBy)
+        $foreignreseach = $foreignreseach->orderBy($sortBy, $orderBy)
             ->paginate(20);
-        $foreignreseach->appends($request->except('page'));    
+        $foreignreseach->appends($request->except('page'));
 
-		$data = compact('foreignreseach','user');
-		return view('stu/stu_foreign_research',$data);
-    	}
+        $data = compact('foreignreseach', 'user');
+        return view('stu/stu_foreign_research', $data);
+    }
 
-    public function insert(Request $request){
-
-        $rules=[
-            'college'=>'required|max:11',
-            'dept'=>'required|max:11',
-            'name'=>'required|max:20',
-            'stuLevel'=>'required|max:11',
-            'nation'=>'required|max:20',
-            'startDate'=>'required',
-            'endDate'=>'required',
-            'comments'=>'max:500',
+    public function insert(Request $request) {
+        $rules = [
+            'college'   => 'required|max:11',
+            'dept'      => 'required|max:11',
+            'name'      => 'required|max:20',
+            'stuLevel'  => 'required|max:11',
+            'nation'    => 'required|max:20',
+            'startDate' => 'required',
+            'endDate'   => 'required',
+            'comments'  => 'max:500',
         ];
 
-        $message=[
-            'required'=>'必須填寫:attribute欄位',
-            'max'=>':attribute欄位的輸入長度不能大於:max',
+        $message = [
+            'required' => '必須填寫:attribute欄位',
+            'max'      => ':attribute欄位的輸入長度不能大於:max',
         ];
 
-        $validator=Validator::make($request->all(),$rules,$message);
+        $validator = Validator::make($request->all(), $rules, $message);
 
-        if($request->startDate > $request->endDate){
-            $validator->errors()->add('endDate','開始時間必須在結束時間前');
+        if ($request->startDate > $request->endDate) {
+            $validator->errors()->add('endDate', '開始時間必須在結束時間前');
             return redirect('stu_foreign_research')->withErrors($validator)->withInput();
         }
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             return redirect('stu_foreign_research')->withErrors($validator)->withInput();
         }
 
         StuForeignResearch::create($request->all());
-        return redirect('stu_foreign_research')->with('success','新增成功');
+        return redirect('stu_foreign_research')->with('success', '新增成功');
     }
 
-    public function search (Request $request){
-
-    	$sortBy = 'id';
+    public function search(Request $request) {
+        $sortBy  = 'id';
         $orderBy = "desc";
-        $user = Auth::user();
-        
-        if($request->sortBy != null)
+        $user    = Auth::user();
+
+        if ($request->sortBy != null) {
             $sortBy = $request->sortBy;
-        if($request->orderBy != null)
+        }
+
+        if ($request->orderBy != null) {
             $orderBy = $request->orderBy;
-        
-        $foreignreseach = StuForeignResearch::join('college_data',function($join){
-                $join->on('stu_foreign_research.college','college_data.college');
-                $join->on('stu_foreign_research.dept','college_data.dept');
-            });
-        if($request->college != 0)
+        }
+
+        $foreignreseach = StuForeignResearch::join('college_data', function ($join) {
+            $join->on('stu_foreign_research.college', 'college_data.college');
+            $join->on('stu_foreign_research.dept', 'college_data.dept');
+        });
+        if ($request->college != 0) {
             $foreignreseach = $foreignreseach
-                ->where('stu_foreign_research.college',$request->college);
-        if($request->dept != 0)
+                ->where('stu_foreign_research.college', $request->college);
+        }
+
+        if ($request->dept != 0) {
             $foreignreseach = $foreignreseach
-                ->where('stu_foreign_research.dept',$request->dept);
-        if($request->name != "")
+                ->where('stu_foreign_research.dept', $request->dept);
+        }
+
+        if ($request->name != "") {
             $foreignreseach = $foreignreseach
-                ->where('name',"like","%$request->name%");        
-        if($request->stuLevel != "")
+                ->where('name', "like", "%$request->name%");
+        }
+
+        if ($request->stuLevel != "") {
             $foreignreseach = $foreignreseach
-                ->where('stuLevel', $request->stuLevel);                
-        if($request->nation != "")
+                ->where('stuLevel', $request->stuLevel);
+        }
+
+        if ($request->nation != "") {
             $foreignreseach = $foreignreseach
-                ->where('nation',"like","%$request->nation%");
-        if($request->startDate != "")
+                ->where('nation', "like", "%$request->nation%");
+        }
+
+        if ($request->startDate != "") {
             $foreignreseach = $foreignreseach
-                ->where('startDate','>=',"$request->startDate");
-        if($request->endDate != "")
+                ->where('startDate', '>=', "$request->startDate");
+        }
+
+        if ($request->endDate != "") {
             $foreignreseach = $foreignreseach
-                ->where('endDate','<=',"$request->endDate");
-        if($request->comments != "")
+                ->where('endDate', '<=', "$request->endDate");
+        }
+
+        if ($request->comments != "") {
             $foreignreseach = $foreignreseach
-                ->where('comments',"like","%$request->comments%");
-        
-        if($user->permission == 2){
-            $foreignreseach = $foreignreseach->where('stu_foreign_research.college',$user->college);
-        }else if($user->permission == 3){
-            $foreignreseach = $foreignreseach->where('stu_foreign_research.college',$user->college)
+                ->where('comments', "like", "%$request->comments%");
+        }
+
+        if ($user->permission == 2) {
+            $foreignreseach = $foreignreseach->where('stu_foreign_research.college', $user->college);
+        } else if ($user->permission == 3) {
+            $foreignreseach = $foreignreseach->where('stu_foreign_research.college', $user->college)
                 ->where('stu_foreign_research.dept', $user->dept);
         }
 
-        $foreignreseach = $foreignreseach->orderBy($sortBy,$orderBy)
+        $foreignreseach = $foreignreseach->orderBy($sortBy, $orderBy)
             ->paginate(20);
-        $foreignreseach->appends($request->except('page'));    
-        $data = compact('foreignreseach','user');
-        return view('stu/stu_foreign_research',$data);
+        $foreignreseach->appends($request->except('page'));
+        $data = compact('foreignreseach', 'user');
+        return view('stu/stu_foreign_research', $data);
     }
 
-       public function edit($id){
+    public function edit($id) {
         $foreignreseach = StuForeignResearch::find($id);
-        if(Gate::allows('permission',$foreignreseach))
-            return view('stu/stu_foreign_research_edit',$foreignreseach);
+        if (Gate::allows('permission', $foreignreseach)) {
+            return view('stu/stu_foreign_research_edit', $foreignreseach);
+        }
+
         return redirect('stu_foreign_research');
     }
 
-    public function update($id,Request $request){
+    public function update($id, Request $request) {
         $foreignreseach = StuForeignResearch::find($id);
-        if(!Gate::allows('permission',$foreignreseach))
+        if (!Gate::allows('permission', $foreignreseach)) {
             return redirect('stu_foreign_research');
-        $rules=[
-            'college'=>'required|max:11',
-            'dept'=>'required|max:11',
-            'name'=>'required|max:20',
-            'stuLevel'=>'required|max:11',
-            'nation'=>'required|max:20',
-            'startDate'=>'required',
-            'endDate'=>'required',
-            'comments'=>'max:500',
+        }
+
+        $rules = [
+            'college'   => 'required|max:11',
+            'dept'      => 'required|max:11',
+            'name'      => 'required|max:20',
+            'stuLevel'  => 'required|max:11',
+            'nation'    => 'required|max:20',
+            'startDate' => 'required',
+            'endDate'   => 'required',
+            'comments'  => 'max:500',
         ];
 
-        $message=[
-            'required'=>'必須填寫:attribute欄位',
-            'max'=>':attribute欄位的輸入長度不能大於:max',
+        $message = [
+            'required' => '必須填寫:attribute欄位',
+            'max'      => ':attribute欄位的輸入長度不能大於:max',
         ];
 
-        $validator=Validator::make($request->all(),$rules,$message);
+        $validator = Validator::make($request->all(), $rules, $message);
 
-        if($request->startDate > $request->endDate){
-            $validator->errors()->add('endDate','開始時間必須在結束時間前');
+        if ($request->startDate > $request->endDate) {
+            $validator->errors()->add('endDate', '開始時間必須在結束時間前');
             return redirect("stu_foreign_research/$id")->withErrors($validator)->withInput();
         }
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             return redirect("stu_foreign_research/$id")->withErrors($validator)->withInput();
         }
 
         $foreignreseach->update($request->all());
-        return redirect('stu_foreign_research')->with('success','更新成功');
+        return redirect('stu_foreign_research')->with('success', '更新成功');
     }
 
-    
-     public function delete($id){
+    public function delete($id) {
         $foreignreseach = StuForeignResearch::find($id);
-        if(!Gate::allows('permission',$foreignreseach))
+        if (!Gate::allows('permission', $foreignreseach)) {
             return redirect('stu_foreign_research');
+        }
+
         $foreignreseach->delete();
         return redirect('stu_foreign_research');
-        }  
-    
-    public function upload(Request $request){
-        Excel::load($request->file('file'),function($reader){
-            $array = $reader->toArray();
+    }
+
+    public function upload(Request $request) {
+        Excel::load($request->file('file'), function ($reader) {
+            $array    = $reader->toArray();
             $newArray = [];
             foreach ($array as $arrayKey => $item) {
 
-                if($this->isAllNull($item))
+                if ($this->isAllNull($item)) {
                     continue;
+                }
 
                 $errorLine = $arrayKey + 2;
-                $rules=[
-                    '所屬一級單位'=>'required|max:11',
-                    '所屬系所部門'=>'required|max:11',
-                    '姓名'=>'required|max:20',
-                    '身分學士碩士或博士'=>'required|max:11',
-                    '前往國家'=>'required|max:20',
-                    '開始時間'=>'required|date',
-                    '結束時間'=>'required|date',
-                    '備註'=>'max:500',
+                $rules     = [
+                    '所屬一級單位'    => 'required|max:11',
+                    '所屬系所部門'    => 'required|max:11',
+                    '姓名'        => 'required|max:20',
+                    '身分學士碩士或博士' => 'required|max:11',
+                    '前往國家'      => 'required|max:20',
+                    '開始時間'      => 'required|date',
+                    '結束時間'      => 'required|date',
+                    '備註'        => 'max:500',
                 ];
 
-                $message=[
-                    'required'=>'必須填寫:attribute欄位',
-                    'max'=>':attribute欄位的輸入長度不能大於:max',
-                    'date'=>':attribute 欄位時間格式錯誤, 應為 xxxx/xx/xx'.", 第 $errorLine 行"
+                $message = [
+                    'required' => '必須填寫:attribute欄位',
+                    'max'      => ':attribute欄位的輸入長度不能大於:max',
+                    'date'     => ':attribute 欄位時間格式錯誤, 應為 xxxx/xx/xx' . ", 第 $errorLine 行",
                 ];
-                $validator = Validator::make($item,$rules,$message);
+                $validator = Validator::make($item, $rules, $message);
 
                 foreach ($item as $key => $value) {
 
@@ -227,7 +250,7 @@ class StuForeignResearchController extends Controller
                             unset($item[$key]);
                             break;
                         case '身分學士碩士或博士':
-                            switch($value){
+                            switch ($value) {
                                 case "學士":
                                     $value = 3;
                                     break;
@@ -238,7 +261,7 @@ class StuForeignResearchController extends Controller
                                     $value = 1;
                                     break;
                                 default:
-                                    $validator->errors()->add('身分',"身分內容填寫錯誤,第 $errorLine 行");
+                                    $validator->errors()->add('身分', "身分內容填寫錯誤,第 $errorLine 行");
                                     break;
                             }
                             $item['stuLevel'] = $value;
@@ -266,36 +289,99 @@ class StuForeignResearchController extends Controller
                     }
                 }
 
-                if($item['startDate'] > $item['endDate']){
-                    $validator->errors()->add('date','開始時間必須在結束時間前'.",第 $errorLine 行");
+                if ($item['startDate'] > $item['endDate']) {
+                    $validator->errors()->add('date', '開始時間必須在結束時間前' . ",第 $errorLine 行");
                 }
-                if(CollegeData::where('college',$item['college'])
-                        ->where('dept',$item['dept'])->first()==null){
-                    $validator->errors()->add('number','系所代碼錯誤'.",第 $errorLine 行");
+                if (CollegeData::where('college', $item['college'])
+                    ->where('dept', $item['dept'])->first() == null) {
+                    $validator->errors()->add('number', '系所代碼錯誤' . ",第 $errorLine 行");
                 }
-                if(!Gate::allows('permission',(object)$item)){
-                    $validator->errors()->add('permission','無法新增未有權限之系所部門'.",第 $errorLine 行");
+                if (!Gate::allows('permission', (object) $item)) {
+                    $validator->errors()->add('permission', '無法新增未有權限之系所部門' . ",第 $errorLine 行");
                 }
-                if(count($validator->errors())>0){
+                if (count($validator->errors()) > 0) {
                     return redirect('stu_foreign_research')
-                                ->withErrors($validator,"upload");
+                        ->withErrors($validator, "upload");
                 }
-                array_push($newArray,$item);
+                array_push($newArray, $item);
             }
             StuForeignResearch::insert($newArray);
         });
         return redirect('stu_foreign_research');
     }
-    
-    public function example(Request $request){
-        return response()->download(public_path().'/Excel_example/stu/stu_foreign_research.xlsx',"本校學生其他出國研修情形.xlsx");
+
+    public function example(Request $request) {
+        return response()->download(public_path() . '/Excel_example/stu/stu_foreign_research.xlsx', "本校學生其他出國研修情形.xlsx");
     }
 
-    private function isAllNull($array){
-        foreach($array as $item){
-            if($item != null)
+    public function download(Request $request) {
+        $sortBy  = 'id';
+        $orderBy = "desc";
+        $user    = Auth::user();
+
+        if ($request->sortBy != null) {
+            $sortBy = $request->sortBy;
+        }
+
+        if ($request->orderBy != null) {
+            $orderBy = $request->orderBy;
+        }
+
+        $foreignreseach = StuForeignResearch::join('college_data', function ($join) {
+            $join->on('stu_foreign_research.college', 'college_data.college');
+            $join->on('stu_foreign_research.dept', 'college_data.dept');
+        });
+
+        if ($user->permission == 2) {
+            $foreignreseach = $foreignreseach->where('stu_foreign_research.college', $user->college);
+        } else if ($user->permission == 3) {
+            $foreignreseach = $foreignreseach->where('stu_foreign_research.college', $user->college)
+                ->where('stu_foreign_research.dept', $user->dept);
+        }
+
+        $foreignreseach         = $foreignreseach->orderBy($sortBy, $orderBy)->get()->toArray();
+        $foreignreseach_array[] = array(/*'索引值',*/ '一級單位', '系所部門', '姓名', '身份', '前往國家', '開始時間', '結束時間', '備註');
+        // dd($foreignreseach);
+        foreach ($foreignreseach as $foreignreseach_data) {
+            $stuLevel = $foreignreseach_data['stuLevel'];
+            if ($stuLevel == 1) $stuLevel = '博士班';
+            else if ($stuLevel == 2) $stuLevel = '碩士班';
+            else if ($stuLevel == 3) $stuLevel = '學士班';
+
+            $foreignreseach_array[] = array(
+                // 'id'         => $foreignreseach_data['id'],
+                'chtCollege' => $foreignreseach_data['chtCollege'],
+                'chtDept'    => $foreignreseach_data['chtDept'],
+                'name'       => $foreignreseach_data['name'],
+                'stuLevel'   => $stuLevel,
+                'nation'     => $foreignreseach_data['nation'],
+                'startDate'  => $foreignreseach_data['startDate'],
+                'endDate'    => $foreignreseach_data['endDate'],
+                'comments'   => $foreignreseach_data['comments'],
+            );
+        }
+
+        Excel::create('本校學生其他出國研修情形', function ($excel) use ($foreignreseach_array) {
+            $excel->setTitle('本校學生其他出國研修情形');
+            $excel->sheet('表單', function ($sheet) use ($foreignreseach_array) {
+                // fromArray(5) parameter:
+                //   - source               要輸出的array
+                //   - nullValue            array資料內null的呈現方式，預設null
+                //   - startCell            資料起始位置，預設A1
+                //   - strictNullComparison 預設情況下0會視為空白，若要顯示0則需改成false，預設true
+                //   - headingGeneration    表頭是否自動產生。預設為true
+                // dd($foreignreseach_array);
+                $sheet->fromArray($foreignreseach_array, null, 'A1', false, false);
+            });
+        })->download('xlsx');
+    }
+
+    private function isAllNull($array) {
+        foreach ($array as $item) {
+            if ($item != null) {
                 return false;
+            }
         }
         return true;
-    }                 			
+    }
 }
